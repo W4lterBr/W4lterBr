@@ -1,114 +1,196 @@
-# Walter Manoel
+<p align="center">
+  <img src="https://raw.githubusercontent.com/W4lterBr/W4lterBr/main/assets/banner.png" width="100%">
+</p>
 
-**Full Stack Developer • Python • React • Fiscal Technology • Business Automation**
+<h1 align="center">
+Olá, eu sou Walter Manoel 👋
+</h1>
 
-Desenvolvedor Full Stack com foco em soluções empresariais, automação de processos e sistemas para o mercado brasileiro.
-
-Minha experiência em contabilidade aliada ao desenvolvimento de software permite criar aplicações que atendem às necessidades reais das empresas, principalmente nas áreas fiscal, tributária, financeira e de gestão.
-
----
-
-## Sobre mim
-
-- 💻 Desenvolvedor Full Stack
-- 🐍 Especialista em desenvolvimento com Python
-- ⚛️ Desenvolvimento Front-end com React e React Native
-- 🏢 Criador da plataforma **DWM Systems**
-- 📄 Desenvolvimento de soluções para documentos fiscais eletrônicos
-- 🤖 Integração de Inteligência Artificial em sistemas corporativos
-- 🚀 Sempre buscando criar aplicações rápidas, intuitivas e escaláveis
-
----
-
-## Tecnologias
-
-### Backend
-
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)
-![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-
-### Frontend
-
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react)
-![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react)
-![Expo](https://img.shields.io/badge/Expo-000000?style=for-the-badge&logo=expo)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite)
-
-### Banco de Dados
-
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql)
-![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql)
-![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite)
-
-### Ferramentas
-
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker)
-![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github)
-![Railway](https://img.shields.io/badge/Railway-000000?style=for-the-badge)
-
----
-
-## Principais Projetos
-
-### 🏥 PlanMed
-Sistema para gestão de clínicas médicas, com agendamento, prontuários, gestão financeira, controle de especialidades e integrações.
-
-### 📊 DWM ERP
-Sistema ERP completo para gestão empresarial, incluindo financeiro, estoque, compras, vendas, cadastros, dashboards e inteligência artificial.
-
-### 🚚 Emissor CT-e
-Plataforma para emissão de Conhecimento de Transporte Eletrônico (CT-e), integrada à SEFAZ.
-
-### 📄 Captura Inteligente de XML
-Aplicação para consulta automática de NF-e, CT-e, NFC-e e NFS-e utilizando Certificado Digital A1 e Web Services da SEFAZ.
-
-### 🤖 IA aplicada a Sistemas
-Integração de modelos de Inteligência Artificial para automação de processos, assistentes internos e produtividade empresarial.
-
----
-
-## Áreas de Interesse
-
-- Engenharia de Software
-- Arquitetura de Sistemas
-- Inteligência Artificial
-- APIs REST
-- Automação Empresarial
-- Desenvolvimento Mobile
-- Sistemas ERP
-- Tecnologia Fiscal
-
----
-
-## Atualmente estudando
-
-- Clean Architecture
-- Microsserviços
-- Performance em aplicações React
-- Inteligência Artificial aplicada ao desenvolvimento
-- Arquiteturas escaláveis
-
----
-
-## GitHub
+<h3 align="center">
+Desenvolvedor Full Stack • Python • React • IA • Fiscal Tech
+</h3>
 
 <p align="center">
 
-<img height="170" src="https://github-readme-stats.vercel.app/api?username=W4lterBr&show_icons=true&theme=github_dark&hide_border=true"/>
-
-<img height="170" src="https://github-readme-stats.vercel.app/api/top-langs/?username=W4lterBr&layout=compact&theme=github_dark&hide_border=true"/>
+<img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&weight=600&size=24&pause=1200&color=C77DFF&center=true&vCenter=true&width=800&lines=Full+Stack+Developer;Python+%7C+React+%7C+FastAPI+%7C+NestJS;ERP+Developer;Fiscal+Automation;AI+Integration;Building+Business+Solutions"/>
 
 </p>
 
 ---
 
-## Contato
+# Sobre mim
 
-- GitHub: https://github.com/W4lterBr
+Sou desenvolvedor Full Stack focado no desenvolvimento de soluções empresariais.
+
+Atualmente desenvolvo plataformas completas para empresas brasileiras, integrando:
+
+- ERP
+- Inteligência Artificial
+- Automação Fiscal
+- APIs
+- Aplicações Web
+- Aplicações Mobile
+
+Minha experiência em Contabilidade me permite desenvolver sistemas alinhados às regras fiscais e tributárias brasileiras.
 
 ---
 
-*"A melhor solução é aquela que resolve um problema real de forma simples, confiável e eficiente."*
+# Tecnologias
+
+<p align="center">
+
+<img src="https://skillicons.dev/icons?i=python,react,typescript,javascript,nodejs,nestjs,fastapi,mysql,postgres,docker,git,github,vscode,linux"/>
+
+</p>
+
+---
+
+# Projetos em Destaque
+
+<table>
+
+<tr>
+
+<td width="50%">
+
+## 🏥 PlanMed
+
+Sistema completo para clínicas médicas.
+
+### Recursos
+
+- Agenda Médica
+- Pacientes
+- Financeiro
+- Especialidades
+- Dashboard
+- IA Integrada
+
+</td>
+
+<td>
+
+<img src="https://github-readme-stats.vercel.app/api/pin/?username=W4lterBr&repo=PlanMed&theme=tokyonight">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+## 📊 DWM ERP
+
+ERP moderno desenvolvido em Python.
+
+- Financeiro
+- Estoque
+- Compras
+- Vendas
+- Dashboard
+- Inteligência Artificial
+
+</td>
+
+<td>
+
+<img src="https://github-readme-stats.vercel.app/api/pin/?username=W4lterBr&repo=ERP-DWM-SYSTEMS&theme=tokyonight">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td>
+
+## 🚚 Emissor CT-e
+
+Sistema profissional para emissão de CT-e.
+
+- SEFAZ
+- XML
+- DACTE
+- Certificado A1
+- Manifestação
+
+</td>
+
+<td>
+
+<img src="https://github-readme-stats.vercel.app/api/pin/?username=W4lterBr&repo=EMISSOR-CTE&theme=tokyonight">
+
+</td>
+
+</tr>
+
+</table>
+
+---
+
+# Estatísticas
+
+<p align="center">
+
+<img height="180" src="https://github-readme-stats.vercel.app/api?username=W4lterBr&show_icons=true&theme=tokyonight&hide_border=true"/>
+
+<img height="180" src="https://github-readme-stats.vercel.app/api/top-langs/?username=W4lterBr&layout=compact&theme=tokyonight&hide_border=true"/>
+
+</p>
+
+---
+
+# Sequência de Contribuições
+
+<p align="center">
+
+<img src="https://streak-stats.demolab.com?user=W4lterBr&theme=tokyonight&hide_border=true"/>
+
+</p>
+
+---
+
+# Atividade
+
+<p align="center">
+
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=W4lterBr&theme=tokyo-night&hide_border=true"/>
+
+</p>
+
+---
+
+# Conquistas
+
+<p align="center">
+
+<img src="https://github-profile-trophy.vercel.app/?username=W4lterBr&theme=tokyonight&margin-w=15&margin-h=15&no-frame=true"/>
+
+</p>
+
+---
+
+# Objetivo
+
+Desenvolver soluções que reduzam a complexidade dos processos empresariais por meio de tecnologia, automação e inteligência artificial.
+
+---
+
+# Vamos nos conectar
+
+<p align="center">
+
+<a href="https://github.com/W4lterBr">
+<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github">
+</a>
+
+</p>
+
+---
+
+<p align="center">
+
+<img src="https://komarev.com/ghpvc/?username=W4lterBr&color=8A2BE2&style=for-the-badge">
+
+</p>
