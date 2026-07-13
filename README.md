@@ -1,147 +1,139 @@
+<!-- ========================== -->
+<!--          BANNER            -->
+<!-- ========================== -->
+
 <p align="center">
-  <img src="https://raw.githubusercontent.com/W4lterBr/W4lterBr/main/assets/banner.png" width="100%">
+  <img src="assets/banner.png" width="100%" alt="DWM Systems Developer">
 </p>
 
-<h1 align="center">
-Olá, eu sou Walter Manoel 👋
-</h1>
+<h1 align="center">Olá, eu sou Walter Manoel 👋</h1>
 
 <h3 align="center">
-Desenvolvedor Full Stack • Python • React • IA • Fiscal Tech
+Desenvolvedor Full Stack • Python • React • Inteligência Artificial • Tecnologia Fiscal
 </h3>
 
 <p align="center">
 
-<img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&weight=600&size=24&pause=1200&color=C77DFF&center=true&vCenter=true&width=800&lines=Full+Stack+Developer;Python+%7C+React+%7C+FastAPI+%7C+NestJS;ERP+Developer;Fiscal+Automation;AI+Integration;Building+Business+Solutions"/>
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=26&duration=3500&pause=1000&color=C77DFF&center=true&vCenter=true&width=900&lines=Full+Stack+Developer;Python+Specialist;React+%26+React+Native;FastAPI+%7C+NestJS;ERP+Developer;Fiscal+Automation;Artificial+Intelligence;Building+Business+Solutions"/>
 
 </p>
 
 ---
 
-# Sobre mim
+# 👨‍💻 Sobre mim
 
-Sou desenvolvedor Full Stack focado no desenvolvimento de soluções empresariais.
+Sou desenvolvedor Full Stack com foco em sistemas empresariais.
 
-Atualmente desenvolvo plataformas completas para empresas brasileiras, integrando:
+Uno experiência em desenvolvimento de software e conhecimento da legislação fiscal brasileira para criar aplicações robustas voltadas à automação de processos empresariais.
+
+Atualmente desenvolvo soluções nas áreas de:
 
 - ERP
+- Clínicas Médicas
+- Emissão de Documentos Fiscais
 - Inteligência Artificial
-- Automação Fiscal
-- APIs
-- Aplicações Web
+- APIs REST
+- Dashboards
 - Aplicações Mobile
-
-Minha experiência em Contabilidade me permite desenvolver sistemas alinhados às regras fiscais e tributárias brasileiras.
+- Automação Empresarial
 
 ---
 
-# Tecnologias
+# 🚀 Tecnologias
 
 <p align="center">
 
-<img src="https://skillicons.dev/icons?i=python,react,typescript,javascript,nodejs,nestjs,fastapi,mysql,postgres,docker,git,github,vscode,linux"/>
+<img src="https://skillicons.dev/icons?i=python,fastapi,react,typescript,javascript,nodejs,nestjs,mysql,postgres,sqlite,docker,git,github,vscode,linux"/>
 
 </p>
 
 ---
 
-# Projetos em Destaque
-
-<table>
-
-<tr>
-
-<td width="50%">
+# 📌 Projetos em Destaque
 
 ## 🏥 PlanMed
 
-Sistema completo para clínicas médicas.
+Sistema completo para gestão de clínicas médicas.
 
-### Recursos
-
-- Agenda Médica
+- Agenda médica
 - Pacientes
-- Financeiro
 - Especialidades
+- Financeiro
 - Dashboard
-- IA Integrada
+- Inteligência Artificial
 
-</td>
+➡️ https://github.com/W4lterBr/PlanMed
 
-<td>
-
-<img src="https://github-readme-stats.vercel.app/api/pin/?username=W4lterBr&repo=PlanMed&theme=tokyonight">
-
-</td>
-
-</tr>
-
-<tr>
-
-<td>
+---
 
 ## 📊 DWM ERP
 
-ERP moderno desenvolvido em Python.
+ERP moderno desenvolvido para gestão empresarial.
 
 - Financeiro
 - Estoque
 - Compras
 - Vendas
+- Cadastros
 - Dashboard
-- Inteligência Artificial
+- IA Integrada
 
-</td>
-
-<td>
-
-<img src="https://github-readme-stats.vercel.app/api/pin/?username=W4lterBr&repo=ERP-DWM-SYSTEMS&theme=tokyonight">
-
-</td>
-
-</tr>
-
-<tr>
-
-<td>
-
-## 🚚 Emissor CT-e
-
-Sistema profissional para emissão de CT-e.
-
-- SEFAZ
-- XML
-- DACTE
-- Certificado A1
-- Manifestação
-
-</td>
-
-<td>
-
-<img src="https://github-readme-stats.vercel.app/api/pin/?username=W4lterBr&repo=EMISSOR-CTE&theme=tokyonight">
-
-</td>
-
-</tr>
-
-</table>
+➡️ https://github.com/W4lterBr/ERP-DWM-SYSTEMS
 
 ---
 
-# Estatísticas
+## 🚚 Emissor CT-e
+
+Sistema completo para emissão de Conhecimento de Transporte Eletrônico.
+
+- CT-e
+- XML
+- DACTE
+- Certificado Digital
+- SEFAZ
+
+➡️ https://github.com/W4lterBr/EMISSOR-CTE
+
+---
+
+## 📄 Captura Inteligente de XML
+
+Sistema para consulta automática de:
+
+- NF-e
+- NFC-e
+- CT-e
+- NFS-e
+
+Utilizando Certificado Digital A1 e Web Services da SEFAZ.
+
+---
+
+## 🤖 Inteligência Artificial
+
+Integração de IA para:
+
+- Assistentes inteligentes
+- Automação de processos
+- Geração de conteúdo
+- Atendimento
+- Produtividade
+
+---
+
+# 📈 Estatísticas
 
 <p align="center">
 
-<img height="180" src="https://github-readme-stats.vercel.app/api?username=W4lterBr&show_icons=true&theme=tokyonight&hide_border=true"/>
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=W4lterBr&show_icons=true&theme=tokyonight&hide_border=true&rank_icon=github"/>
 
-<img height="180" src="https://github-readme-stats.vercel.app/api/top-langs/?username=W4lterBr&layout=compact&theme=tokyonight&hide_border=true"/>
+<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=W4lterBr&layout=compact&theme=tokyonight&hide_border=true"/>
 
 </p>
 
 ---
 
-# Sequência de Contribuições
+# 🔥 Sequência de Contribuições
 
 <p align="center">
 
@@ -151,7 +143,7 @@ Sistema profissional para emissão de CT-e.
 
 ---
 
-# Atividade
+# 📊 Atividade
 
 <p align="center">
 
@@ -161,28 +153,57 @@ Sistema profissional para emissão de CT-e.
 
 ---
 
-# Conquistas
+# 🏆 Conquistas
 
 <p align="center">
 
-<img src="https://github-profile-trophy.vercel.app/?username=W4lterBr&theme=tokyonight&margin-w=15&margin-h=15&no-frame=true"/>
+<img src="https://github-profile-trophy.vercel.app/?username=W4lterBr&theme=tokyonight&no-frame=true&margin-w=15&margin-h=15"/>
 
 </p>
 
 ---
 
-# Objetivo
+# 🎯 Atualmente estudando
 
-Desenvolver soluções que reduzam a complexidade dos processos empresariais por meio de tecnologia, automação e inteligência artificial.
+- Clean Architecture
+- Microsserviços
+- Inteligência Artificial aplicada ao desenvolvimento
+- Engenharia de Software
+- Performance em aplicações React
+- Arquiteturas escaláveis
 
 ---
 
-# Vamos nos conectar
+# 💼 Áreas de Atuação
+
+✔ Sistemas ERP
+
+✔ Sistemas para Clínicas
+
+✔ Tecnologia Fiscal
+
+✔ Integrações com SEFAZ
+
+✔ APIs REST
+
+✔ Desenvolvimento Web
+
+✔ Desenvolvimento Mobile
+
+✔ Dashboards
+
+✔ Automação Empresarial
+
+✔ Inteligência Artificial
+
+---
+
+# 📫 Contato
 
 <p align="center">
 
 <a href="https://github.com/W4lterBr">
-<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github">
+<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"/>
 </a>
 
 </p>
@@ -191,6 +212,12 @@ Desenvolver soluções que reduzam a complexidade dos processos empresariais por
 
 <p align="center">
 
-<img src="https://komarev.com/ghpvc/?username=W4lterBr&color=8A2BE2&style=for-the-badge">
+<img src="https://komarev.com/ghpvc/?username=W4lterBr&color=8A2BE2&style=for-the-badge"/>
 
+</p>
+
+---
+
+<p align="center">
+<b>"Transformando regras de negócio em soluções de software inteligentes."</b>
 </p>
