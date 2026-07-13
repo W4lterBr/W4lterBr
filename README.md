@@ -1,41 +1,30 @@
-<!-- ========================== -->
-<!--          BANNER            -->
-<!-- ========================== -->
+<!-- ===================================================== -->
+<!--                  DWM SYSTEMS README                   -->
+<!-- ===================================================== -->
 
 <p align="center">
-  <img src="assets/banner.png" width="100%" alt="DWM Systems Developer">
+  <img src="./assets/banner.png" width="100%" alt="DWM Systems Developer"/>
 </p>
 
-<h1 align="center">Olá, eu sou Walter Manoel 👋</h1>
-
-<h3 align="center">
-Desenvolvedor Full Stack • Python • React • Inteligência Artificial • Tecnologia Fiscal
-</h3>
+<h1 align="center">Walter Manoel</h1>
 
 <p align="center">
+<strong>Full Stack Developer • Python • React • Inteligência Artificial • Tecnologia Fiscal</strong>
+</p>
 
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=26&duration=3500&pause=1000&color=C77DFF&center=true&vCenter=true&width=900&lines=Full+Stack+Developer;Python+Specialist;React+%26+React+Native;FastAPI+%7C+NestJS;ERP+Developer;Fiscal+Automation;Artificial+Intelligence;Building+Business+Solutions"/>
-
+<p align="center">
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=24&pause=1200&color=C77DFF&center=true&vCenter=true&width=850&lines=Full+Stack+Developer;Python+Specialist;React+%26+React+Native;FastAPI+%7C+NestJS;ERP+Developer;Fiscal+Automation;Artificial+Intelligence;Building+Business+Solutions"/>
 </p>
 
 ---
 
 # 👨‍💻 Sobre mim
 
-Sou desenvolvedor Full Stack com foco em sistemas empresariais.
+Sou desenvolvedor Full Stack com foco em sistemas empresariais e automação de processos.
 
-Uno experiência em desenvolvimento de software e conhecimento da legislação fiscal brasileira para criar aplicações robustas voltadas à automação de processos empresariais.
+Minha experiência em tecnologia, aliada ao conhecimento da área fiscal e contábil, permite desenvolver soluções voltadas às necessidades reais das empresas brasileiras.
 
-Atualmente desenvolvo soluções nas áreas de:
-
-- ERP
-- Clínicas Médicas
-- Emissão de Documentos Fiscais
-- Inteligência Artificial
-- APIs REST
-- Dashboards
-- Aplicações Mobile
-- Automação Empresarial
+Atualmente trabalho no desenvolvimento de aplicações Web, Desktop e Mobile utilizando arquiteturas modernas e integração com Inteligência Artificial.
 
 ---
 
@@ -49,85 +38,85 @@ Atualmente desenvolvo soluções nas áreas de:
 
 ---
 
-# 📌 Projetos em Destaque
+# 💼 Principais Projetos
 
 ## 🏥 PlanMed
 
-Sistema completo para gestão de clínicas médicas.
+Sistema completo para gestão de clínicas.
 
-- Agenda médica
+**Principais recursos**
+
+- Agenda Médica
 - Pacientes
 - Especialidades
 - Financeiro
 - Dashboard
 - Inteligência Artificial
-
-➡️ https://github.com/W4lterBr/PlanMed
+- Aplicativo Mobile
 
 ---
 
 ## 📊 DWM ERP
 
-ERP moderno desenvolvido para gestão empresarial.
+Sistema ERP desenvolvido para gestão empresarial.
+
+**Módulos**
 
 - Financeiro
-- Estoque
 - Compras
 - Vendas
+- Estoque
 - Cadastros
-- Dashboard
-- IA Integrada
-
-➡️ https://github.com/W4lterBr/ERP-DWM-SYSTEMS
+- Relatórios
+- Dashboard Executivo
+- IA integrada
 
 ---
 
 ## 🚚 Emissor CT-e
 
-Sistema completo para emissão de Conhecimento de Transporte Eletrônico.
+Sistema profissional para emissão de documentos fiscais eletrônicos.
+
+**Recursos**
 
 - CT-e
 - XML
 - DACTE
-- Certificado Digital
-- SEFAZ
-
-➡️ https://github.com/W4lterBr/EMISSOR-CTE
+- Certificado Digital A1
+- Comunicação com SEFAZ
 
 ---
 
 ## 📄 Captura Inteligente de XML
 
-Sistema para consulta automática de:
+Sistema responsável pela consulta automática de documentos fiscais.
 
 - NF-e
 - NFC-e
 - CT-e
 - NFS-e
 
-Utilizando Certificado Digital A1 e Web Services da SEFAZ.
+Integração completa com Web Services da SEFAZ.
 
 ---
 
 ## 🤖 Inteligência Artificial
 
-Integração de IA para:
+Aplicações utilizando IA para:
 
 - Assistentes inteligentes
 - Automação de processos
-- Geração de conteúdo
 - Atendimento
-- Produtividade
+- Geração de conteúdo
+- Produtividade empresarial
 
 ---
 
-# 📈 Estatísticas
+# 📈 GitHub
 
 <p align="center">
 
-<img height="180em" src="https://github-readme-stats.vercel.app/api?username=W4lterBr&show_icons=true&theme=tokyonight&hide_border=true&rank_icon=github"/>
-
-<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=W4lterBr&layout=compact&theme=tokyonight&hide_border=true"/>
+<img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=W4lterBr&theme=github_dark"/>
 
 </p>
 
@@ -137,7 +126,7 @@ Integração de IA para:
 
 <p align="center">
 
-<img src="https://streak-stats.demolab.com?user=W4lterBr&theme=tokyonight&hide_border=true"/>
+<img src="https://streak-stats.demolab.com?user=W4lterBr&theme=github-dark-blue&hide_border=true"/>
 
 </p>
 
@@ -147,64 +136,73 @@ Integração de IA para:
 
 <p align="center">
 
-<img src="https://github-readme-activity-graph.vercel.app/graph?username=W4lterBr&theme=tokyo-night&hide_border=true"/>
+<img src="https://github-readme-activity-graph.vercel.app/graph?username=W4lterBr&theme=github-dark&hide_border=true"/>
 
 </p>
 
 ---
 
-# 🏆 Conquistas
+# 🛠️ Áreas de Especialização
 
-<p align="center">
+✔ Desenvolvimento Full Stack
 
-<img src="https://github-profile-trophy.vercel.app/?username=W4lterBr&theme=tokyonight&no-frame=true&margin-w=15&margin-h=15"/>
+✔ Python
 
-</p>
+✔ React
 
----
+✔ React Native
 
-# 🎯 Atualmente estudando
+✔ FastAPI
 
-- Clean Architecture
-- Microsserviços
-- Inteligência Artificial aplicada ao desenvolvimento
-- Engenharia de Software
-- Performance em aplicações React
-- Arquiteturas escaláveis
+✔ NestJS
 
----
+✔ APIs REST
 
-# 💼 Áreas de Atuação
-
-✔ Sistemas ERP
-
-✔ Sistemas para Clínicas
+✔ ERP
 
 ✔ Tecnologia Fiscal
 
 ✔ Integrações com SEFAZ
 
-✔ APIs REST
-
-✔ Desenvolvimento Web
-
-✔ Desenvolvimento Mobile
+✔ Inteligência Artificial
 
 ✔ Dashboards
 
 ✔ Automação Empresarial
 
-✔ Inteligência Artificial
+✔ PostgreSQL
+
+✔ MySQL
+
+✔ Docker
 
 ---
 
-# 📫 Contato
+# 📚 Atualmente estudando
+
+- Arquitetura de Software
+
+- Clean Architecture
+
+- Microsserviços
+
+- Engenharia de Prompt
+
+- IA aplicada ao desenvolvimento
+
+- Escalabilidade de aplicações
+
+---
+
+# 🎯 Objetivo
+
+Desenvolver soluções que simplifiquem processos empresariais através de software de alta qualidade, automação e inteligência artificial.
+
+---
 
 <p align="center">
 
-<a href="https://github.com/W4lterBr">
-<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white"/>
-</a>
+<img src="https://komarev.com/ghpvc/?username=W4lterBr&style=for-the-badge&color=blueviolet"/>
 
 </p>
 
@@ -212,12 +210,6 @@ Integração de IA para:
 
 <p align="center">
 
-<img src="https://komarev.com/ghpvc/?username=W4lterBr&color=8A2BE2&style=for-the-badge"/>
+<b>Building Business Solutions</b>
 
-</p>
-
----
-
-<p align="center">
-<b>"Transformando regras de negócio em soluções de software inteligentes."</b>
 </p>
