@@ -11,6 +11,23 @@
     <meta name="theme-color" content="#BFB9D6" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
 
+    <!--
+      Abertura: enquanto o app carrega (no celular leva um instante), a tela já mostra a paisagem do papel de parede,
+      e não o texto de reserva lá embaixo. O texto continua no HTML para buscadores e aparece para quem está sem
+      JavaScript. A paisagem começa a baixar aqui, junto com o app, e é o mesmo arquivo que o app usa depois.
+    -->
+    <script>
+      document.documentElement.classList.add('js')
+    </script>
+    <style>
+      html.js body {
+        background: #bfb9d6 url('./src/assets/paisagem.svg') 50% 100% / cover no-repeat;
+      }
+      html.js .static-fallback {
+        display: none;
+      }
+    </style>
+
     <!-- Prévia do link no WhatsApp, LinkedIn etc. Troque a URL se o endereço do site mudar. -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
