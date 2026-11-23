@@ -3,8 +3,9 @@ import { Contato } from './apps/Contato'
 import { Projetos } from './apps/Projetos'
 import { Sobre } from './apps/Sobre'
 import { Terminal } from './apps/Terminal'
-import { profile } from './data/profile'
-import { AppIcon, GitHubIcon, Logo } from './os/icons'
+import { useI18n } from './i18n'
+import { AppIcon, GitHubIcon } from './os/icons'
+import { LanguageMenu } from './os/LanguageMenu'
 import { LockScreen } from './os/LockScreen'
 import { BarPlayer, MusicProvider } from './os/music'
 import { playSound } from './os/sounds'
@@ -15,11 +16,12 @@ import { Widgets } from './os/Widgets'
 import { Window } from './os/Window'
 import { APP_IDS, initialWinState, topWindow, winReducer, type AppId } from './os/windows'
 
-const APPS: Record<AppId, { label: string; title: string; w: number; h: number }> = {
-  sobre: { label: 'Sobre mim', title: 'Sobre mim', w: 800, h: 660 },
-  projetos: { label: 'Projetos', title: 'Projetos', w: 920, h: 620 },
-  terminal: { label: 'Terminal', title: 'Terminal', w: 640, h: 420 },
-  contato: { label: 'Contato', title: 'Contato', w: 520, h: 420 },
+// Tamanho inicial de cada janela. Os nomes vêm das traduções (app.sobre, app.projetos...).
+const APPS: Record<AppId, { w: number; h: number }> = {
+  sobre: { w: 800, h: 660 },
+  projetos: { w: 920, h: 620 },
+  terminal: { w: 640, h: 420 },
+  contato: { w: 520, h: 420 },
 }
 
 const isMobile = () => window.matchMedia('(max-width: 720px)').matches
@@ -33,6 +35,7 @@ function appFromHash(): AppId | undefined {
 type Toast = { id: number; title: string; text: string }
 
 export default function App() {
+  const { t, locale, content: data } = useI18n()
   const [state, dispatch] = useReducer(winReducer, initialWinState)
   const [locked, setLocked] = useState(() => !appFromHash())
   const [toast, setToast] = useState<Toast | null>(null)
@@ -111,7 +114,7 @@ export default function App() {
       return
     }
     const id = window.setTimeout(
-      () => notify('Bem-vindo ao meu portfólio', 'Os aplicativos ficam no dock aqui embaixo. Fique à vontade para explorar.'),
+      () => notify(t('welcome.title'), t('welcome.text')),
       650,
     )
     return () => window.clearTimeout(id)
@@ -158,9 +161,9 @@ export default function App() {
     contato: <Contato />,
   }
 
-  const time = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+  const time = now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
   // mesmo formato do relógio do macOS: dom. 22 de nov.
-  const date = now.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' }).replace(',', '')
+  const date = now.toLocaleDateString(locale, { weekday: 'short', day: 'numeric', month: 'short' }).replace(',', '')
 
   return (
     <MusicProvider>
@@ -169,12 +172,12 @@ export default function App() {
       <div className="os" inert={locked}>
         <header className="bar">
           <div className="bar-left">
-            <Logo size={18} />
-            <span className="bar-brand">{top ? APPS[top.id].title : 'DWM OS'}</span>
-            <nav className="bar-menu" aria-label="Menu">
+            <LanguageMenu />
+            <span className="bar-brand">{top ? t(`app.${top.id}`) : 'DWM OS'}</span>
+            <nav className="bar-menu" aria-label={t('bar.menu')}>
               {APP_IDS.map((id) => (
                 <button key={id} type="button" onClick={() => openApp(id)}>
-                  {APPS[id].label}
+                  {t(`app.${id}`)}
                 </button>
               ))}
             </nav>
@@ -205,7 +208,7 @@ export default function App() {
                 <strong>{toast.title}</strong>
                 <span>{toast.text}</span>
               </div>
-              <button type="button" className="toast-close" aria-label="Fechar aviso" onClick={() => setToast(null)}>
+              <button type="button" className="toast-close" aria-label={t('toast.close')} onClick={() => setToast(null)}>
                 <svg viewBox="0 0 10 10" aria-hidden><path d="M2 2l6 6M8 2L2 8" /></svg>
               </button>
             </div>
@@ -215,7 +218,7 @@ export default function App() {
             <Window
               key={win.id}
               win={win}
-              title={APPS[win.id].title}
+              title={t(`app.${win.id}`)}
               width={APPS[win.id].w}
               height={APPS[win.id].h}
               active={top?.id === win.id}
@@ -229,7 +232,7 @@ export default function App() {
           ))}
         </main>
 
-        <nav className="dock" aria-label="Aplicativos">
+        <nav className="dock" aria-label={t('dock.label')}>
           <div className="dock-shelf">
             {APP_IDS.map((id) => {
               const win = state.wins.find((w) => w.id === id)
@@ -243,16 +246,16 @@ export default function App() {
                   aria-pressed={top?.id === id}
                   onClick={() => (top?.id === id ? minimizeApp(id) : openApp(id))}
                 >
-                  <span className={`dock-tile tile-${id}`}>
+                  <span className="dock-tile">
                     <AppIcon id={id} />
                   </span>
-                  <span className="dock-label">{APPS[id].label}</span>
+                  <span className="dock-label">{t(`app.${id}`)}</span>
                 </button>
               )
             })}
             <span className="dock-sep" aria-hidden />
-            <a className="dock-item" href={profile.contact.github} target="_blank" rel="noreferrer">
-              <span className="dock-tile tile-github">
+            <a className="dock-item" href={data.profile.contact.github} target="_blank" rel="noreferrer">
+              <span className="dock-tile">
                 <GitHubIcon />
               </span>
               <span className="dock-label">GitHub</span>

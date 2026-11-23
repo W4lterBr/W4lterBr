@@ -2,7 +2,10 @@
   DWM OS
   Visual no estilo iOS/macOS: papel de parede claro em degradê, widgets de cantos bem arredondados,
   vidro fosco na barra, no dock e nos avisos, janelas com os três botões coloridos.
-  Cor de destaque: violeta da DWM Systems. Para trocar a cor do site, mude --accent e os tons do .wallpaper.
+  Paleta única: tudo o que tem cor usa a família do violeta da DWM Systems (--accent e seus tons).
+  As exceções são as que carregam significado: os três botões da janela, bateria fraca ou carregando,
+  mensagens de erro e de sucesso no terminal, e as bandeiras do menu de idioma.
+  Para trocar a cor do site, mude --accent, --accent-strong, --accent-soft, --c1 e --c2, e os tons do .wallpaper.
 */
 :root {
   --accent: #7c4ddb;
@@ -16,6 +19,9 @@
   --card: #ffffff;
   --glass: rgba(255, 255, 255, 0.66);
   --deep: #2a1b57;
+  /* degradê usado em ícones e cabeçalhos coloridos */
+  --c1: #9a74ee;
+  --c2: #5a32bd;
 
   --ui: -apple-system, BlinkMacSystemFont, 'Inter Variable', 'Segoe UI', system-ui, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Consolas, monospace;
@@ -113,7 +119,7 @@ button {
   top: -10vmax;
   width: 52vmax;
   height: 46vmax;
-  background: #fbd3ee;
+  background: #ecd9fb;
   --dx: 10vw;
   --dy: 9vh;
   --s: 1.18;
@@ -124,7 +130,7 @@ button {
   top: -14vmax;
   width: 50vmax;
   height: 48vmax;
-  background: #c6dbff;
+  background: #d9d4ff;
   --dx: -9vw;
   --dy: 12vh;
   --s: 1.12;
@@ -166,7 +172,7 @@ button {
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: linear-gradient(140deg, #a77bf3, #6a3fd0 60%, #4b2aa8);
+  background: linear-gradient(140deg, var(--c1), var(--c2));
   color: #fff;
   font-weight: 700;
   font-size: 1.1rem;
@@ -397,6 +403,59 @@ button {
   opacity: 1;
   visibility: visible;
 }
+.pop-left {
+  right: auto;
+  left: 0;
+  transform-origin: top left;
+}
+.lang {
+  position: relative;
+}
+.lang-btn {
+  padding: 0 4px;
+}
+.lang-pop {
+  width: 236px;
+  padding: 6px;
+}
+.lang-head {
+  padding: 6px 10px 4px;
+  font-size: 0.74rem;
+  font-weight: 650;
+  color: var(--label-3);
+}
+.lang-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+.lang-item:hover {
+  background: rgba(60, 60, 67, 0.1);
+}
+.lang-item[aria-checked='true'] {
+  font-weight: 650;
+}
+.flag {
+  flex: none;
+  width: 24px;
+  height: 17px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14);
+}
+.lang-check {
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  color: var(--accent);
+}
 .vol {
   position: relative;
 }
@@ -493,7 +552,7 @@ button {
   place-items: center;
   flex: none;
   overflow: hidden;
-  background: linear-gradient(140deg, #a77bf3, #6a3fd0);
+  background: linear-gradient(140deg, var(--c1), var(--c2));
   color: #fff;
 }
 .np-cover img {
@@ -737,12 +796,12 @@ button {
   stroke-width: 2.6;
 }
 .clock-sec {
-  stroke: #ff9500;
+  stroke: var(--accent);
   stroke-width: 1.1;
   stroke-linecap: round;
 }
 .clock-pin {
-  fill: #ff9500;
+  fill: var(--accent);
 }
 
 .widget-cal {
@@ -910,6 +969,7 @@ button {
 .dock-tile {
   display: grid;
   place-items: center;
+  background: linear-gradient(160deg, var(--c1), var(--c2));
   width: 54px;
   height: 54px;
   border-radius: 15px;
@@ -920,22 +980,6 @@ button {
 .dock-item:hover .dock-tile,
 .dock-item:focus-visible .dock-tile {
   transform: translateY(-6px) scale(1.07);
-}
-.tile-sobre {
-  background: linear-gradient(160deg, #a983f5, #6a3fd0);
-}
-.tile-projetos {
-  background: linear-gradient(160deg, #6fb6ff, #2f6fe0);
-}
-.tile-terminal {
-  background: linear-gradient(160deg, #3d3a4d, #17151f);
-}
-.tile-contato {
-  background: linear-gradient(160deg, #ff9ac6, #e0457e);
-}
-.tile-github {
-  background: #fff;
-  color: #17151f;
 }
 .dock-label {
   white-space: nowrap;
@@ -1134,10 +1178,13 @@ button {
   width: 24px;
   height: 24px;
   border-radius: 50%;
+  background: var(--card);
+  box-shadow: inset 0 0 0 1px rgba(90, 50, 189, 0.18);
 }
 .tech-logo svg {
   width: 14px;
   height: 14px;
+  fill: var(--accent-strong);
 }
 
 /* ---------- Sobre ---------- */
@@ -1154,7 +1201,7 @@ button {
   position: relative;
   height: 132px;
   overflow: hidden;
-  background: linear-gradient(120deg, #8a61e8, #c56fe0 55%, #6aa6ff);
+  background: linear-gradient(120deg, #8a61e8, #a57af0 55%, #7a56e0);
 }
 .ab-cover span {
   position: absolute;
@@ -1166,15 +1213,15 @@ button {
   top: -70px;
   width: 280px;
   height: 220px;
-  background: #ff9ad5;
-  opacity: 0.75;
+  background: #c9a6ff;
+  opacity: 0.7;
 }
 .ab-cover span:nth-child(2) {
   right: 8%;
   top: -40px;
   width: 300px;
   height: 200px;
-  background: #7fd0ff;
+  background: #b79cf7;
   opacity: 0.7;
 }
 .ab-cover span:nth-child(3) {
@@ -1259,28 +1306,21 @@ button {
   gap: 2px;
   padding: 16px 18px;
   border-radius: 18px;
-  color: #fff;
-}
-.ab-stats li:nth-child(1) {
-  background: linear-gradient(150deg, #a983f5, #6a3fd0);
-}
-.ab-stats li:nth-child(2) {
-  background: linear-gradient(150deg, #5fa8fb, #2f6fe0);
-}
-.ab-stats li:nth-child(3) {
-  background: linear-gradient(150deg, #f277ae, #c2337a);
+  background: var(--card);
+  box-shadow: 0 1px 2px rgba(40, 20, 90, 0.06);
 }
 .ab-stats strong {
   font-size: 1.9rem;
   font-weight: 750;
   line-height: 1.1;
   letter-spacing: -0.03em;
+  color: var(--accent-strong);
 }
 .ab-stats span {
   font-size: 0.86rem;
   font-weight: 500;
   line-height: 1.3;
-  opacity: 0.95;
+  color: var(--label-2);
 }
 .ab-card {
   display: grid;

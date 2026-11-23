@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { profile, projects } from '../data/profile'
+import { useI18n, type UIKey } from '../i18n'
 import { APP_IDS, type AppId } from '../os/windows'
 
 type Line = { kind: 'in' | 'out' | 'ok' | 'err'; text: string }
@@ -9,25 +9,26 @@ type Props = {
   openProject: (id: string) => void
 }
 
-const HELP: [string, string][] = [
-  ['ajuda', 'lista os comandos'],
-  ['sobre', 'resumo de quem eu sou'],
-  ['projetos', 'lista os projetos'],
-  ['abrir <nome>', 'abre uma janela ou um projeto (ex.: abrir planmed)'],
-  ['skills', 'competências por área'],
-  ['contato', 'como falar comigo'],
-  ['sefaz', 'consulta o status do serviço'],
-  ['emitir', 'simula a autorização de uma nota'],
-  ['limpar', 'limpa a tela'],
+// Os comandos funcionam nos dois idiomas, qualquer que seja o idioma da interface.
+const HELP: { pt: string; en: string; key: UIKey }[] = [
+  { pt: 'ajuda', en: 'help', key: 'term.help.ajuda' },
+  { pt: 'sobre', en: 'about', key: 'term.help.sobre' },
+  { pt: 'projetos', en: 'projects', key: 'term.help.projetos' },
+  { pt: 'abrir <nome>', en: 'open <name>', key: 'term.help.abrir' },
+  { pt: 'skills', en: 'skills', key: 'term.help.skills' },
+  { pt: 'contato', en: 'contact', key: 'term.help.contato' },
+  { pt: 'sefaz', en: 'sefaz', key: 'term.help.sefaz' },
+  { pt: 'emitir', en: 'issue', key: 'term.help.emitir' },
+  { pt: 'limpar', en: 'clear', key: 'term.help.limpar' },
 ]
 
-const WELCOME: Line[] = [
-  { kind: 'out', text: 'DWM OS 1.0' },
-  { kind: 'out', text: 'Digite "ajuda" para ver os comandos.' },
-]
+/** Nomes de janela aceitos em "abrir", nos dois idiomas. */
+const APP_ALIASES: Record<string, AppId> = { about: 'sobre', projects: 'projetos', contact: 'contato' }
 
 export function Terminal({ openApp, openProject }: Props) {
-  const [lines, setLines] = useState<Line[]>(WELCOME)
+  const { t, lang, content } = useI18n()
+  const { profile, projects } = content
+  const [lines, setLines] = useState<Line[]>([])
   const [value, setValue] = useState('')
   const [history, setHistory] = useState<string[]>([])
   const [cursor, setCursor] = useState(-1)
@@ -50,19 +51,22 @@ export function Terminal({ openApp, openProject }: Props) {
     switch (cmd) {
       case 'ajuda':
       case 'help':
-        return HELP.map(([c, d]) => out(`${c.padEnd(14)} ${d}`))
+        return HELP.map((h) => out(`${h[lang].padEnd(14)} ${t(h.key)}`))
       case 'sobre':
+      case 'about':
       case 'whoami':
-        return [out(`${profile.name}, ${profile.role} na ${profile.brand}.`), ...profile.bio.map(out)]
+        return [out(t('term.whoami', { name: profile.name, role: profile.role, brand: profile.brand })), ...profile.bio.map(out)]
       case 'projetos':
+      case 'projects':
       case 'ls':
         return projects.map((p) => out(`${p.file.padEnd(18)} ${p.kind}`))
       case 'skills':
         return profile.competencias.map((c) => out(`${c.area.padEnd(20)} ${c.itens.join(', ')}`))
-      case 'contato': {
+      case 'contato':
+      case 'contact': {
         const c = profile.contact
         const rows = [
-          c.email && `E-mail    ${c.email}`,
+          c.email && `${t('contact.email').padEnd(9)} ${c.email}`,
           c.github && `GitHub    ${c.github.replace('https://', '')}`,
           c.linkedin && `LinkedIn  ${c.linkedin.replace('https://', '')}`,
         ].filter(Boolean) as string[]
@@ -70,38 +74,32 @@ export function Terminal({ openApp, openProject }: Props) {
       }
       case 'abrir':
       case 'open': {
-        const app = APP_IDS.find((id) => id === arg)
+        const app = APP_IDS.find((id) => id === arg) ?? APP_ALIASES[arg]
         if (app) {
           openApp(app)
-          return [{ kind: 'ok', text: `Janela "${app}" aberta.` }]
+          return [{ kind: 'ok', text: t('term.opened', { t: t(`app.${app}`) }) }]
         }
         const project = projects.find((p) => p.id === arg || p.file.toLowerCase() === arg || p.title.toLowerCase() === arg)
         if (project) {
           openProject(project.id)
-          return [{ kind: 'ok', text: `${project.file} aberto em Projetos.` }]
+          return [{ kind: 'ok', text: t('term.openedProject', { t: project.file }) }]
         }
         return [
           {
             kind: 'err',
-            text: arg
-              ? `Não encontrei "${arg}". Use um destes: ${[...APP_IDS, ...projects.map((p) => p.id)].join(', ')}.`
-              : 'Diga o que abrir. Exemplo: abrir projetos',
+            text: arg ? t('term.notFound', { t: arg, list: [...APP_IDS, ...projects.map((p) => p.id)].join(', ') }) : t('term.openWhat'),
           },
         ]
       }
       case 'sefaz':
-        return [out('Consultando status do serviço...'), { kind: 'ok', text: 'cStat 107  Serviço em Operação' }]
+        return [out(t('term.sefaz1')), { kind: 'ok', text: t('term.sefaz2') }]
       case 'emitir':
-        return [
-          out('Assinando XML com certificado A1...'),
-          out('Enviando lote para autorização...'),
-          { kind: 'ok', text: 'cStat 100  Autorizado o uso da NF-e' },
-          out('Simulação: nenhuma nota foi emitida de verdade.'),
-        ]
+      case 'issue':
+        return [out(t('term.emit1')), out(t('term.emit2')), { kind: 'ok', text: t('term.emit3') }, out(t('term.emit4'))]
       case '':
         return []
       default:
-        return [{ kind: 'err', text: `Comando não encontrado: ${cmd}. Digite "ajuda".` }]
+        return [{ kind: 'err', text: t('term.unknown', { t: cmd }) }]
     }
   }
 
@@ -136,6 +134,9 @@ export function Terminal({ openApp, openProject }: Props) {
   return (
     <div className="term" onClick={() => inputRef.current?.focus()}>
       <div className="term-out" role="log" aria-live="polite">
+        {/* as duas linhas de abertura acompanham o idioma; o histórico fica como foi digitado */}
+        <p className="term-line is-out">DWM OS 1.0</p>
+        <p className="term-line is-out">{t('term.hint')}</p>
         {lines.map((l, i) => (
           <p key={i} className={`term-line is-${l.kind}`}>
             {l.kind === 'in' && <span className="term-prompt">walter@dwm:~$ </span>}
@@ -157,7 +158,7 @@ export function Terminal({ openApp, openProject }: Props) {
           autoComplete="off"
           autoCapitalize="none"
           spellCheck={false}
-          aria-label="Comando"
+          aria-label={t('term.input')}
         />
       </form>
     </div>

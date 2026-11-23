@@ -1,4 +1,5 @@
 import { useEffect, useRef, type CSSProperties, type Dispatch, type PointerEvent, type ReactNode } from 'react'
+import { useI18n } from '../i18n'
 import type { Win, WinAction } from './windows'
 
 type Props = {
@@ -16,6 +17,7 @@ type Props = {
 const MOBILE = '(max-width: 720px)'
 
 export function Window({ win, title, width, height, active, leaving, dispatch, children }: Props) {
+  const { t } = useI18n()
   const ref = useRef<HTMLElement>(null)
   const drag = useRef<{ dx: number; dy: number } | null>(null)
 
@@ -78,17 +80,17 @@ export function Window({ win, title, width, height, active, leaving, dispatch, c
         onDoubleClick={() => dispatch({ type: 'toggleMax', id: win.id })}
       >
         <div className="lights">
-          <button type="button" className="light light-close" aria-label={`Fechar ${title}`} title="Fechar (Esc)" onClick={() => dispatch({ type: 'close', id: win.id })}>
+          <button type="button" className="light light-close" aria-label={t('win.close', { t: title })} title={t('win.closeTip')} onClick={() => dispatch({ type: 'close', id: win.id })}>
             <svg viewBox="0 0 10 10" aria-hidden><path d="M2.6 2.6l4.8 4.8M7.4 2.6L2.6 7.4" /></svg>
           </button>
-          <button type="button" className="light light-min" aria-label={`Minimizar ${title}`} title="Minimizar" onClick={() => dispatch({ type: 'minimize', id: win.id })}>
+          <button type="button" className="light light-min" aria-label={t('win.min', { t: title })} title={t('win.minTip')} onClick={() => dispatch({ type: 'minimize', id: win.id })}>
             <svg viewBox="0 0 10 10" aria-hidden><path d="M2 5h6" /></svg>
           </button>
           <button
             type="button"
             className="light light-max"
-            aria-label={win.maximized ? `Restaurar ${title}` : `Maximizar ${title}`}
-            title={win.maximized ? 'Restaurar' : 'Maximizar'}
+            aria-label={win.maximized ? t('win.restore', { t: title }) : t('win.max', { t: title })}
+            title={win.maximized ? t('win.restoreTip') : t('win.maxTip')}
             onClick={() => dispatch({ type: 'toggleMax', id: win.id })}
           >
             <svg viewBox="0 0 10 10" aria-hidden><path d="M2 5h6M5 2v6" /></svg>
