@@ -6,6 +6,7 @@ import { Terminal } from './apps/Terminal'
 import { profile } from './data/profile'
 import { AppIcon, GitHubIcon, Logo } from './os/icons'
 import { LockScreen } from './os/LockScreen'
+import { MusicPlayer } from './os/MusicPlayer'
 import { useClock } from './os/useClock'
 import { Widgets } from './os/Widgets'
 import { Window } from './os/Window'
@@ -111,7 +112,8 @@ export default function App() {
   }
 
   const time = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-  const date = now.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' })
+  // mesmo formato do relógio do macOS: dom. 22 de nov.
+  const date = now.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' }).replace(',', '')
 
   return (
     <>
@@ -121,13 +123,40 @@ export default function App() {
         <header className="bar">
           <div className="bar-left">
             <Logo size={18} />
-            <span className="bar-brand">DWM OS</span>
-            {top && <span className="bar-app">{APPS[top.id].title}</span>}
+            <span className="bar-brand">{top ? APPS[top.id].title : 'DWM OS'}</span>
+            <nav className="bar-menu" aria-label="Menu">
+              {APP_IDS.map((id) => (
+                <button key={id} type="button" onClick={() => openApp(id)}>
+                  {APPS[id].label}
+                </button>
+              ))}
+            </nav>
           </div>
-          <time className="bar-clock" dateTime={now.toISOString()}>
-            <span className="bar-date">{date}</span>
-            <span>{time}</span>
-          </time>
+
+          <MusicPlayer />
+
+          <div className="bar-right">
+            <span className="bar-status" aria-hidden>
+              <svg className="bar-battery" viewBox="0 0 28 13">
+                <rect x="0.5" y="0.5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity="0.45" />
+                <rect x="2" y="2" width="20" height="9" rx="2" fill="currentColor" />
+                <path d="M25 4.5v4c.9-.3 1.5-1.1 1.5-2s-.6-1.700-1.500-2z" fill="currentColor" opacity="0.5" />
+              </svg>
+              <svg className="bar-wifi" viewBox="0 0 18 13">
+                <path d="M1 4.3a11.5 11.5 0 0 1 16 0M3.7 7a7.7 7.7 0 0 1 10.6 0M6.4 9.7a3.8 3.8 0 0 1 5.2 0" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                <circle cx="9" cy="11.7" r="1.2" fill="currentColor" />
+              </svg>
+              <svg className="bar-control" viewBox="0 0 16 14">
+                <rect x="0.75" y="0.75" width="14.5" height="5" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                <circle cx="11.8" cy="3.25" r="1.4" fill="currentColor" />
+                <rect x="0.75" y="8.25" width="14.5" height="5" rx="2.5" fill="currentColor" />
+              </svg>
+            </span>
+            <time className="bar-clock" dateTime={now.toISOString()}>
+              <span className="bar-date">{date}</span>
+              <span>{time}</span>
+            </time>
+          </div>
         </header>
 
         <main className="desk">

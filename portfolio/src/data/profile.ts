@@ -40,6 +40,12 @@ export const profile = {
     cv: '', // URL do currículo em PDF ou página
   },
 
+  // Player do topo. Cole aqui o link de uma playlist, álbum ou música do Spotify.
+  music: {
+    titulo: 'lofi beats',
+    spotify: 'https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn',
+  },
+
   numeros: [
     { valor: '+8 anos', rotulo: 'Experiência profissional' },
     { valor: '+4 anos', rotulo: 'Rotinas contábeis e fiscais' },

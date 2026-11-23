@@ -20,7 +20,7 @@
   --ui: -apple-system, BlinkMacSystemFont, 'Inter Variable', 'Segoe UI', system-ui, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Consolas, monospace;
 
-  --bar-h: 32px;
+  --bar-h: 34px;
   --dock-h: 104px;
   --wall: radial-gradient(60% 50% at 12% 18%, #fbdcf1 0, transparent 62%),
     radial-gradient(55% 55% at 88% 12%, #cfe0ff 0, transparent 62%),
@@ -165,10 +165,12 @@ button {
 }
 
 .bar {
-  display: flex;
+  position: relative;
+  z-index: 9500;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  gap: 12px;
   padding: 0 14px;
   background: rgba(255, 255, 255, 0.45);
   backdrop-filter: blur(20px) saturate(1.6);
@@ -178,24 +180,181 @@ button {
 .bar-left {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.75rem;
   min-width: 0;
 }
 .bar-brand {
   font-weight: 700;
-}
-.bar-app {
-  padding-left: 0.4rem;
-  color: var(--label-2);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+.bar-menu {
+  display: flex;
+  gap: 2px;
+  min-width: 0;
+}
+.bar-menu button {
+  padding: 3px 9px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.bar-menu button:hover {
+  background: rgba(60, 60, 67, 0.12);
+}
+.bar-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+.bar-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.bar-battery {
+  width: 26px;
+  height: 12px;
+}
+.bar-wifi {
+  width: 17px;
+  height: 12px;
+}
+.bar-control {
+  width: 15px;
+  height: 13px;
 }
 .bar-clock {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.45rem;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+/* ---------- player de música do topo ---------- */
+.music {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.music-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 0 4px 0 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 2px 8px -3px rgba(40, 20, 90, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+.music-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  padding: 0 6px 0 0;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.music-logo {
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+.music-text {
+  display: grid;
+  /* largura fixa: a pílula não muda de tamanho quando o texto troca para "Tocando no Spotify" */
+  min-width: 108px;
+  line-height: 1.1;
+}
+.music-title {
+  max-width: 190px;
+  overflow: hidden;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.music-sub {
+  font-size: 0.66rem;
+  color: var(--label-2);
+}
+.music-play {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(60, 60, 67, 0.12);
+  cursor: pointer;
+}
+.music-play:hover {
+  background: rgba(60, 60, 67, 0.22);
+}
+.music-play:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+.music-play svg {
+  width: 10px;
+  height: 10px;
+  fill: var(--label);
+}
+.music-pill.is-playing .music-play {
+  background: var(--accent);
+}
+.music-pill.is-playing .music-play svg {
+  fill: #fff;
+}
+.music-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  width: min(380px, calc(100vw - 24px));
+  padding: 10px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(24px) saturate(1.6);
+  box-shadow: 0 24px 50px -20px rgba(40, 20, 90, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+  transform: translateX(-50%) translateY(-6px);
+  opacity: 0;
+  /* fechado continua montado (só invisível), para a música não parar */
+  visibility: hidden;
+  transition: opacity 0.16s, transform 0.16s, visibility 0.16s;
+}
+.music-panel.is-open {
+  transform: translateX(-50%);
+  opacity: 1;
+  visibility: visible;
+}
+.music-embed {
+  height: 352px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(60, 60, 67, 0.08);
+}
+.music-embed iframe {
+  display: block;
+  border: 0;
+}
+.music-note {
+  padding: 8px 6px 0;
+  font-size: 0.82rem;
+  color: var(--label-2);
+}
+.music-link {
+  display: block;
+  padding: 8px 6px 2px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-strong);
 }
 
 .desk {
@@ -1033,12 +1192,28 @@ button {
 }
 
 /* ---------- telas estreitas: janelas ocupam a tela toda ---------- */
+@media (max-width: 1080px) {
+  .bar-menu {
+    display: none;
+  }
+}
+
 @media (max-width: 720px) {
   :root {
     --dock-h: 96px;
   }
-  .bar-date {
+  .bar-date,
+  .bar-menu,
+  .bar-control,
+  .music-text {
     display: none;
+  }
+  .music-info {
+    padding: 0;
+  }
+  .bar-status,
+  .bar-right {
+    gap: 8px;
   }
   .desk {
     overflow-y: auto;
@@ -1193,7 +1368,8 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
   .lock,
-  .dock-tile {
+  .dock-tile,
+  .music-panel {
     transition: none;
   }
   .toast {
