@@ -22,10 +22,10 @@ Todo o texto está em `src/data/profile.ts`: bio, números, competências, traje
 
 ## Publicar
 
-O workflow `.github/workflows/deploy.yml` (na raiz do repositório) publica no GitHub Pages a cada push em `main`
-que altere `portfolio/`. Em Settings > Pages, escolha "GitHub Actions" como fonte.
+O site é publicado pela Netlify. O arquivo `netlify.toml` (na raiz do repositório) manda compilar `portfolio/`
+e publicar `portfolio/dist`. Cada push em `main` atualiza o site; cada pull request ganha uma prévia.
 
-Se o endereço do site mudar, atualize `og:url` e `og:image` em `index.html`.
+Se o endereço do site mudar (outro nome na Netlify ou domínio próprio), atualize `og:url` e `og:image` em `index.html`.
 
 ## Imagem de prévia do link
 
