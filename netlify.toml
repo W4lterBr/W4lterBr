@@ -1,0 +1,9 @@
+# Netlify: compila o portfólio a partir de portfolio/ e publica portfolio/dist.
+# Sem este arquivo a Netlify publica o repositório cru e o site não abre.
+[build]
+  base = "portfolio"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
