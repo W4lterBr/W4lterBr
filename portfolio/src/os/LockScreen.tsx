@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
-import { profile } from '../data/profile'
+import { useI18n } from '../i18n'
 import { LockPlayer } from './music'
 import { useClock } from './useClock'
 import { Wallpaper } from './Wallpaper'
@@ -13,6 +13,8 @@ const DRAG_START = -6 // abaixo disso ainda conta como clique
  * O rodapé é um <button> de verdade, então Enter e Espaço funcionam e leitores de tela anunciam a ação.
  */
 export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
+  const { t, locale, content } = useI18n()
+  const { profile } = content
   const now = useClock()
   const [leaving, setLeaving] = useState(false)
   const [offset, setOffset] = useState(0)
@@ -74,8 +76,8 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
     unlock()
   }
 
-  const time = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-  const date = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })
+  const time = now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
+  const date = now.toLocaleDateString(locale, { weekday: 'long', day: 'numeric', month: 'long' })
   const initials = profile.name.split(' ').map((p) => p[0]).join('').slice(0, 2)
   const dragging = !leaving && offset < 0
 
@@ -113,7 +115,7 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
       </div>
 
       <button ref={ref} type="button" className="lock-foot" onClick={onClick}>
-        <span className="lock-hint">Clique ou deslize para cima para desbloquear</span>
+        <span className="lock-hint">{t('lock.hint')}</span>
         <span className="lock-handle" aria-hidden />
       </button>
     </div>

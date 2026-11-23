@@ -13,11 +13,11 @@ npm run preview  # serve dist/ localmente
 
 ## Editar o conteúdo
 
-Todo o texto está em `src/data/profile.ts`: bio, números, competências, trajetória, contato e projetos.
+Todo o conteúdo está em `src/data/profile.ts`, em português e em inglês: bio, números, competências, trajetória, contato e projetos.
 
 - **Contato:** preencha `contact.email`, `linkedin`, `whatsapp` e `cv`. Campo vazio não aparece no site.
-- **Projetos:** cada item aceita `link` (sistema no ar), `repo` (código público) e `images`. A cor (`cor`) e o desenho
-  (`icone`) de cada projeto também ficam ali.
+- **Projetos:** cada item aceita `link` (sistema no ar), `repo` (código público) e `images`. O desenho do ícone
+  (`icone`) de cada projeto também fica ali.
   Coloque os prints em `public/projetos/<id>/` em WebP, com no máximo 1600 px de largura.
 - **Stack dos projetos:** os itens marcados com `// confirmar` foram deduzidos e precisam de revisão.
 
@@ -45,3 +45,16 @@ chrome --headless=new --hide-scrollbars --window-size=1200,630 --allow-file-acce
   da barra abre o controle de volume, que vale para os sons e para a música.
 - **Bateria:** é de enfeite. Perde 1% a cada 15 s (`DRAIN_EVERY_MS` em `src/os/StatusIcons.tsx`) e recarrega com um clique.
 - **Wi-Fi:** mostra a conexão real do visitante (online/offline e velocidade estimada, quando o navegador informa).
+
+## Idiomas
+
+O site tem português e inglês. O logo no canto superior esquerdo abre o menu de idioma; a escolha fica salva no navegador.
+Na primeira visita vale o idioma do navegador (português para quem navega em português, inglês para os demais).
+
+- **Conteúdo** (bio, projetos, trajetória): `src/data/profile.ts`, nos blocos `pt` e `en`. Ao mudar um, mude o outro.
+- **Textos da interface** (botões, avisos, rótulos): `src/i18n.tsx`.
+
+## Cores
+
+A paleta é uma só: a família do violeta definida no topo de `src/styles.css` (`--accent`, `--accent-strong`,
+`--accent-soft`, `--c1`, `--c2`). Para trocar a cor do site, mude essas variáveis e os tons do `.wallpaper`.

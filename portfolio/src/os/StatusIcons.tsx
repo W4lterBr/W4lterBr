@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react'
+import { useI18n } from '../i18n'
 import { getVolume, playSound, setVolume, subscribeVolume } from './sounds'
 
 type Notify = (title: string, text: string) => void
@@ -8,6 +9,7 @@ const FLOOR = 4
 
 /** Bateria de enfeite: esgota devagar e recarrega com um clique. */
 export function Battery({ notify }: { notify: Notify }) {
+  const { t } = useI18n()
   const [level, setLevel] = useState(100)
   const [charging, setCharging] = useState(false)
   const warned = useRef(false)
@@ -33,8 +35,9 @@ export function Battery({ notify }: { notify: Notify }) {
     if (level > 20) warned.current = false
     if (level <= 15 && !warned.current && !charging) {
       warned.current = true
-      notify('Bateria fraca', `Restam ${level}%. Clique na bateria para recarregar.`)
+      notify(t('battery.lowTitle'), t('battery.lowText', { n: level }))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [level, charging, notify])
 
   const recharge = () => {
@@ -48,8 +51,8 @@ export function Battery({ notify }: { notify: Notify }) {
     <button
       type="button"
       className={`bar-btn bar-battery${low ? ' is-low' : ''}${charging ? ' is-charging' : ''}`}
-      aria-label={`Bateria em ${level}%. Clique para recarregar.`}
-      title={charging ? 'Recarregando...' : `Bateria: ${level}%. Clique para recarregar`}
+      aria-label={t('battery.label', { n: level })}
+      title={charging ? t('battery.charging') : t('battery.title', { n: level })}
       onClick={recharge}
     >
       <span className="bar-battery-pct">{level}%</span>
@@ -67,6 +70,7 @@ type NetInfo = { effectiveType?: string; downlink?: number; addEventListener?: (
 
 /** Wi-Fi: reflete a conexão de verdade (online/offline e velocidade estimada) e pulsa de tempos em tempos. */
 export function Wifi({ notify }: { notify: Notify }) {
+  const { t } = useI18n()
   const [online, setOnline] = useState(() => navigator.onLine)
   const [, refresh] = useState(0)
   const net = (navigator as Navigator & { connection?: NetInfo }).connection
@@ -74,11 +78,11 @@ export function Wifi({ notify }: { notify: Notify }) {
   useEffect(() => {
     const on = () => {
       setOnline(true)
-      notify('Conexão restabelecida', 'Você está online de novo.')
+      notify(t('wifi.backTitle'), t('wifi.backText'))
     }
     const off = () => {
       setOnline(false)
-      notify('Sem conexão', 'A internet caiu. O que já carregou continua funcionando.')
+      notify(t('wifi.lostTitle'), t('wifi.lostText'))
     }
     const change = () => refresh((n) => n + 1)
     window.addEventListener('online', on)
@@ -89,17 +93,17 @@ export function Wifi({ notify }: { notify: Notify }) {
       window.removeEventListener('offline', off)
       net?.removeEventListener?.('change', change)
     }
-  }, [net, notify])
+  }, [net, notify, t])
 
   // força do sinal a partir da velocidade estimada pelo navegador (quando ele informa)
   const down = net?.downlink
   const bars = !online ? 0 : down === undefined ? 3 : down >= 5 ? 3 : down >= 1.5 ? 2 : 1
   const detail = !online
-    ? 'Sem conexão'
-    : `Conectado${net?.effectiveType ? ` (${net.effectiveType.toUpperCase()})` : ''}${down ? `, cerca de ${down} Mb/s` : ''}`
+    ? t('wifi.off')
+    : `${t('wifi.on')}${net?.effectiveType ? ` (${net.effectiveType.toUpperCase()})` : ''}${down ? `, ${t('wifi.speed', { n: down })}` : ''}`
 
   return (
-    <span className={`bar-wifi${online ? '' : ' is-off'}`} data-bars={bars} role="img" aria-label={`Wi-Fi: ${detail}`} title={`Wi-Fi: ${detail}`}>
+    <span className={`bar-wifi${online ? '' : ' is-off'}`} data-bars={bars} role="img" aria-label={t('wifi.label', { t: detail })} title={t('wifi.label', { t: detail })}>
       <svg viewBox="0 0 18 14">
         <path className="wifi-arc wifi-3" d="M1 4.800a11.500 11.500 0 0 1 16 0" />
         <path className="wifi-arc wifi-2" d="M3.700 7.500a7.700 7.700 0 0 1 10.600 0" />
@@ -116,6 +120,7 @@ export function Wifi({ notify }: { notify: Notify }) {
  * Clique no ícone abre o controle deslizante; a roda do mouse sobre ele sobe e desce de 5 em 5.
  */
 export function VolumeControl() {
+  const { t } = useI18n()
   const volume = useSyncExternalStore(subscribeVolume, getVolume)
   const [open, setOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
@@ -167,8 +172,8 @@ export function VolumeControl() {
         className="bar-btn bar-sound"
         aria-expanded={open}
         aria-controls="vol-pop"
-        aria-label={`Volume: ${volume}%. Abrir controle de volume.`}
-        title={`Volume: ${volume}%`}
+        aria-label={t('vol.open', { n: volume })}
+        title={t('vol.tip', { n: volume })}
         onClick={() => setOpen((o) => !o)}
       >
         {icon}
@@ -176,11 +181,11 @@ export function VolumeControl() {
 
       <div id="vol-pop" className={`pop vol-pop${open ? ' is-open' : ''}`} inert={!open}>
         <p className="vol-head">
-          <span>Som</span>
+          <span>{t('vol.title')}</span>
           <span>{volume}%</span>
         </p>
         <div className="vol-row">
-          <button type="button" className="vol-mute" aria-label={volume === 0 ? 'Ativar som' : 'Silenciar'} title={volume === 0 ? 'Ativar som' : 'Silenciar'} onClick={toggleMute}>
+          <button type="button" className="vol-mute" aria-label={volume === 0 ? t('vol.unmute') : t('vol.mute')} title={volume === 0 ? t('vol.unmute') : t('vol.mute')} onClick={toggleMute}>
             {icon}
           </button>
           <input
@@ -190,7 +195,7 @@ export function VolumeControl() {
             max={100}
             step={1}
             value={volume}
-            aria-label="Volume"
+            aria-label={t('vol.range')}
             style={{ '--v': `${volume}%` } as CSSProperties}
             onChange={(e) => setVolume(Number(e.target.value))}
             // um toque curto ao soltar, para ouvir o nível escolhido

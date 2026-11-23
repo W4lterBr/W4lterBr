@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
-import { profile } from '../data/profile'
+import { site } from '../data/profile'
+import { useI18n } from '../i18n'
 import { getVolume, subscribeVolume } from './sounds'
 
 /**
@@ -66,11 +67,11 @@ export function useMusic(): Music {
 }
 
 export function MusicProvider({ children }: { children: ReactNode }) {
-  const source = profile.music.soundcloud
+  const source = site.music.soundcloud
   const [started, setStarted] = useState(false)
   const [status, setStatus] = useState<Music['status']>('idle')
   const [playing, setPlaying] = useState(false)
-  const [track, setTrack] = useState({ title: profile.music.titulo, artist: profile.music.artista, cover: null as string | null, link: source })
+  const [track, setTrack] = useState({ title: site.music.titulo, artist: site.music.artista, cover: null as string | null, link: source })
   const [position, setPosition] = useState(0)
   const [duration, setDuration] = useState(0)
   const volume = useSyncExternalStore(subscribeVolume, getVolume)
@@ -189,15 +190,16 @@ function clock(ms: number): string {
 
 function Controls() {
   const m = useMusic()
+  const { t } = useI18n()
   return (
     <div className="np-controls">
-      <button type="button" aria-label="Faixa anterior" title="Anterior" onClick={m.prev}>
+      <button type="button" aria-label={t('music.prev')} title={t('music.prevTip')} onClick={m.prev}>
         <Prev />
       </button>
-      <button type="button" className="np-play" aria-label={m.playing ? 'Pausar música' : 'Tocar música'} title={m.playing ? 'Pausar' : 'Tocar'} onClick={m.toggle}>
+      <button type="button" className="np-play" aria-label={m.playing ? t('music.pause') : t('music.play')} title={m.playing ? t('music.pauseTip') : t('music.playTip')} onClick={m.toggle}>
         {m.playing ? <Pause /> : <Play />}
       </button>
-      <button type="button" aria-label="Próxima faixa" title="Próxima" onClick={m.next}>
+      <button type="button" aria-label={t('music.next')} title={t('music.nextTip')} onClick={m.next}>
         <Next />
       </button>
     </div>
@@ -206,12 +208,13 @@ function Controls() {
 
 function Title() {
   const m = useMusic()
+  const { t } = useI18n()
   return (
     <span className="np-text">
-      <a className="np-title" href={m.link} target="_blank" rel="noreferrer" title="Abrir no SoundCloud">
-        {m.status === 'error' ? 'Música indisponível' : m.title}
+      <a className="np-title" href={m.link} target="_blank" rel="noreferrer" title={t('music.open')}>
+        {m.status === 'error' ? t('music.error') : m.title}
       </a>
-      <span className="np-artist">{m.status === 'loading' ? 'Carregando...' : m.artist}</span>
+      <span className="np-artist">{m.status === 'loading' ? t('music.loading') : m.artist}</span>
     </span>
   )
 }
@@ -219,8 +222,9 @@ function Title() {
 /** Player compacto do centro da barra do topo. */
 export function BarPlayer() {
   const m = useMusic()
+  const { t } = useI18n()
   return (
-    <div className={`np np-bar${m.playing ? ' is-playing' : ''}`} role="group" aria-label="Música">
+    <div className={`np np-bar${m.playing ? ' is-playing' : ''}`} role="group" aria-label={t('music.group')}>
       <Cover src={m.cover} />
       <Title />
       <Controls />
@@ -231,9 +235,10 @@ export function BarPlayer() {
 /** Cartão de música da tela de bloqueio, com barra de progresso. */
 export function LockPlayer() {
   const m = useMusic()
+  const { t } = useI18n()
   const pct = m.duration > 0 ? Math.min(100, (m.position / m.duration) * 100) : 0
   return (
-    <div className={`np np-lock${m.playing ? ' is-playing' : ''}`} role="group" aria-label="Música">
+    <div className={`np np-lock${m.playing ? ' is-playing' : ''}`} role="group" aria-label={t('music.group')}>
       <div className="np-row">
         <Cover src={m.cover} />
         <Title />
@@ -241,7 +246,7 @@ export function LockPlayer() {
       <Controls />
       <div className="np-progress">
         <span>{clock(m.position)}</span>
-        <div className="np-track" role="progressbar" aria-label="Progresso da faixa" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(pct)}>
+        <div className="np-track" role="progressbar" aria-label={t('music.progress')} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(pct)}>
           <div style={{ width: `${pct}%` }} />
         </div>
         <span>{clock(m.duration)}</span>

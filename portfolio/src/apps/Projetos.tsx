@@ -1,5 +1,6 @@
-import { useEffect, useState, type CSSProperties } from 'react'
-import { projects, type Project } from '../data/profile'
+import { useEffect, useState } from 'react'
+import type { Project } from '../data/profile'
+import { useI18n } from '../i18n'
 import { TechList } from '../os/tech'
 
 type Props = {
@@ -33,9 +34,9 @@ function ProjectGlyph({ icon }: { icon: Project['icone'] }) {
   )
 }
 
-const tint = (p: Project) => ({ '--c1': p.cor[0], '--c2': p.cor[1] }) as CSSProperties
-
 export function Projetos({ request }: Props) {
+  const { t, content } = useI18n()
+  const { projects } = content
   // No celular a janela mostra a lista primeiro; em telas largas, lista e detalhe lado a lado.
   const wide = typeof window !== 'undefined' && !window.matchMedia('(max-width: 720px)').matches
   const [selected, setSelected] = useState<string | null>(request?.id ?? (wide ? projects[0].id : null))
@@ -48,12 +49,12 @@ export function Projetos({ request }: Props) {
 
   return (
     <div className="pj" data-view={project ? 'detail' : 'list'}>
-      <nav className="pj-list" aria-label="Projetos">
-        <p className="pj-list-title">Sistemas</p>
+      <nav className="pj-list" aria-label={t('app.projetos')}>
+        <p className="pj-list-title">{t('proj.list')}</p>
         <ul>
           {projects.map((p) => (
             <li key={p.id}>
-              <button type="button" className="pj-item" style={tint(p)} aria-current={p.id === selected ? 'true' : undefined} onClick={() => setSelected(p.id)}>
+              <button type="button" className="pj-item" aria-current={p.id === selected ? 'true' : undefined} onClick={() => setSelected(p.id)}>
                 <span className="pj-icon">
                   <ProjectGlyph icon={p.icone} />
                 </span>
@@ -70,14 +71,14 @@ export function Projetos({ request }: Props) {
       <div className="pj-detail">
         {project ? (
           // a chave refaz a animação de entrada a cada troca de projeto
-          <article key={project.id} className="pj-page" style={tint(project)}>
+          <article key={project.id} className="pj-page">
             <header className="pj-hero">
               <span className="pj-hero-art" aria-hidden>
                 <ProjectGlyph icon={project.icone} />
               </span>
               <button type="button" className="pj-back" onClick={() => setSelected(null)}>
                 <svg viewBox="0 0 10 16" aria-hidden><path d="M8 2L2 8l6 6" fill="none" stroke="currentColor" strokeWidth="2.200" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                Projetos
+                {t('proj.back')}
               </button>
               <span className="pj-icon pj-icon-lg">
                 <ProjectGlyph icon={project.icone} />
@@ -90,22 +91,22 @@ export function Projetos({ request }: Props) {
                 <li>
                   {project.items.length} {project.unidade}
                 </li>
-                <li>{project.repo ? 'Código aberto' : 'Código privado'}</li>
+                <li>{project.repo ? t('proj.public') : t('proj.private')}</li>
               </ul>
             </header>
 
             <div className="pj-body">
               <section className="pj-card">
-                <h4>Sobre</h4>
+                <h4>{t('proj.about')}</h4>
                 <p className="pj-summary">{project.summary}</p>
               </section>
 
               {project.images && project.images.length > 0 && (
                 <section className="pj-card">
-                  <h4>Telas</h4>
+                  <h4>{t('proj.screens')}</h4>
                   <div className="pj-shots">
                     {project.images.map((src) => (
-                      <img key={src} src={src} alt={`Tela do ${project.title}`} loading="lazy" decoding="async" />
+                      <img key={src} src={src} alt={t('proj.screenAlt', { t: project.title })} loading="lazy" decoding="async" />
                     ))}
                   </div>
                 </section>
@@ -124,7 +125,7 @@ export function Projetos({ request }: Props) {
               </section>
 
               <section className="pj-card">
-                <h4>Tecnologias</h4>
+                <h4>{t('proj.tech')}</h4>
                 <TechList items={project.stack} />
               </section>
 
@@ -132,12 +133,12 @@ export function Projetos({ request }: Props) {
                 <p className="pj-links">
                   {project.link && (
                     <a className="btn" href={project.link} target="_blank" rel="noreferrer">
-                      Abrir o sistema
+                      {t('proj.open')}
                     </a>
                   )}
                   {project.repo && (
                     <a className="btn btn-quiet" href={project.repo} target="_blank" rel="noreferrer">
-                      Ver o código
+                      {t('proj.code')}
                     </a>
                   )}
                 </p>
@@ -145,7 +146,7 @@ export function Projetos({ request }: Props) {
             </div>
           </article>
         ) : (
-          <p className="pj-empty">Escolha um projeto na lista.</p>
+          <p className="pj-empty">{t('proj.empty')}</p>
         )}
       </div>
     </div>

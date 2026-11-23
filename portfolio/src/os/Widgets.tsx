@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { profile } from '../data/profile'
+import { useI18n } from '../i18n'
 import type { AppId } from './windows'
 
 function ClockWidget() {
+  const { t, locale } = useI18n()
   const [now, setNow] = useState(() => new Date())
   useEffect(() => {
     const id = window.setInterval(() => setNow(new Date()), 1000)
@@ -12,10 +13,10 @@ function ClockWidget() {
   const s = now.getSeconds()
   const m = now.getMinutes() + s / 60
   const h = (now.getHours() % 12) + m / 60
-  const label = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+  const label = now.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
 
   return (
-    <div className="widget widget-clock" role="img" aria-label={`Relógio: ${label}`}>
+    <div className="widget widget-clock" role="img" aria-label={t('widget.clock', { t: label })}>
       <svg viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="46" className="clock-face" />
         {Array.from({ length: 12 }, (_, i) => {
@@ -36,23 +37,26 @@ function ClockWidget() {
 }
 
 function CalendarWidget() {
+  const { t, locale } = useI18n()
   const today = new Date()
   const year = today.getFullYear()
   const month = today.getMonth()
   const offset = new Date(year, month, 1).getDay()
   const days = new Date(year, month + 1, 0).getDate()
   const cells: (number | null)[] = [...Array<null>(offset).fill(null), ...Array.from({ length: days }, (_, i) => i + 1)]
-  const monthName = today.toLocaleDateString('pt-BR', { month: 'long' })
+  const monthName = today.toLocaleDateString(locale, { month: 'long' })
 
   return (
-    <div className="widget widget-cal" aria-label={`Calendário de ${monthName}`}>
+    <div className="widget widget-cal" aria-label={t('widget.calendar', { t: monthName })}>
       <p className="cal-month">{monthName}</p>
       <div className="cal-grid" aria-hidden>
-        {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((d, i) => (
-          <span key={i} className="cal-dow">
-            {d}
-          </span>
-        ))}
+        {t('widget.weekdays')
+          .split(',')
+          .map((d, i) => (
+            <span key={i} className="cal-dow">
+              {d}
+            </span>
+          ))}
         {cells.map((d, i) => (
           <span key={i} className={d === today.getDate() ? 'cal-day is-today' : 'cal-day'}>
             {d ?? ''}
@@ -64,11 +68,13 @@ function CalendarWidget() {
 }
 
 export function Widgets({ openApp }: { openApp: (id: AppId) => void }) {
+  const { t, content } = useI18n()
+  const { profile } = content
   const initials = profile.name.split(' ').map((p) => p[0]).join('').slice(0, 2)
 
   return (
     <div className="widgets">
-      <section className="widget widget-profile" aria-label="Apresentação">
+      <section className="widget widget-profile" aria-label={t('widget.intro')}>
         <div className="profile-top">
           <span className="avatar" aria-hidden>{initials}</span>
           <div>
@@ -83,10 +89,10 @@ export function Widgets({ openApp }: { openApp: (id: AppId) => void }) {
         <p className="profile-line">{profile.natureza}.</p>
         <div className="profile-actions">
           <button type="button" className="btn" onClick={() => openApp('projetos')}>
-            Ver projetos
+            {t('widget.projects')}
           </button>
           <button type="button" className="btn btn-quiet" onClick={() => openApp('sobre')}>
-            Sobre mim
+            {t('app.sobre')}
           </button>
         </div>
       </section>
@@ -94,7 +100,7 @@ export function Widgets({ openApp }: { openApp: (id: AppId) => void }) {
       <ClockWidget />
       <CalendarWidget />
 
-      <section className="widget widget-stats" aria-label="Em números">
+      <section className="widget widget-stats" aria-label={t('widget.numbers')}>
         {profile.numeros.map((n) => (
           <div key={n.rotulo}>
             <strong>{n.valor}</strong>
