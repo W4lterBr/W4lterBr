@@ -1,5 +1,7 @@
 import {
+  siAvaloniaui,
   siDocker,
+  siDotnet,
   siExpo,
   siFastapi,
   siGit,
@@ -7,11 +9,16 @@ import {
   siLinux,
   siMysql,
   siNestjs,
+  siNextdotjs,
   siNodedotjs,
   siPostgresql,
+  siPrisma,
   siPython,
+  siQt,
   siReact,
   siSqlite,
+  siTailwindcss,
+  siTauri,
   siTypescript,
   type SimpleIcon,
 } from 'simple-icons'
@@ -36,6 +43,13 @@ const LOGOS: Record<string, SimpleIcon> = {
   Docker: siDocker,
   Git: siGit,
   Linux: siLinux,
+  'Next.js': siNextdotjs,
+  Prisma: siPrisma,
+  'Tailwind CSS': siTailwindcss,
+  Tauri: siTauri,
+  '.NET': siDotnet,
+  Avalonia: siAvaloniaui,
+  PyQt5: siQt,
 }
 
 export function Tech({ name }: { name: string }) {

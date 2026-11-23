@@ -57,7 +57,7 @@ const profileText: Record<Lang, ProfileText> = {
     numeros: [
       { valor: '+8 anos', rotulo: 'Experiência profissional' },
       { valor: '+4 anos', rotulo: 'Rotinas contábeis e fiscais' },
-      { valor: '5', rotulo: 'Sistemas no portfólio' },
+      { valor: '{projetos}', rotulo: 'Sistemas no portfólio' },
     ],
     formacao: { curso: 'Bacharelado em Ciências Contábeis', quando: 'Conclusão em dez/2025' },
     trajetoria: [
@@ -102,7 +102,7 @@ const profileText: Record<Lang, ProfileText> = {
     numeros: [
       { valor: '8+ years', rotulo: 'Professional experience' },
       { valor: '4+ years', rotulo: 'Accounting and tax routines' },
-      { valor: '5', rotulo: 'Systems in the portfolio' },
+      { valor: '{projetos}', rotulo: 'Systems in the portfolio' },
     ],
     formacao: { curso: 'Bachelor’s degree in Accounting', quando: 'Completed in Dec 2025' },
     trajetoria: [
@@ -143,7 +143,7 @@ type ProjectBase = {
   /** Nome de arquivo mostrado no terminal. */
   file: string
   /** Desenho do ícone. Os disponíveis estão em src/apps/Projetos.tsx. */
-  icone: 'saude' | 'grafico' | 'caminhao' | 'codigo' | 'brilho'
+  icone: 'saude' | 'grafico' | 'nota' | 'documento' | 'caminhao' | 'codigo' | 'carteira' | 'predio' | 'carro' | 'bolo' | 'brilho'
   stack: string[]
   /** URL pública do sistema ou de uma demonstração. Vazio = não aparece. */
   link?: string
@@ -167,11 +167,19 @@ type ProjectText = {
 
 export type Project = ProjectBase & ProjectText
 
+// A ordem desta lista é a ordem em que os projetos aparecem no site.
+// As tecnologias vêm do README de cada repositório.
 const projectBase: ProjectBase[] = [
-  { id: 'planmed', file: 'PlanMed.xml', icone: 'saude', stack: ['React', 'TypeScript', 'React Native'] }, // stack: confirmar
-  { id: 'dwm-erp', file: 'DWM-ERP.xml', icone: 'grafico', stack: ['Python'] }, // stack: confirmar
+  { id: 'planmed', file: 'PlanMed.xml', icone: 'saude', stack: ['NestJS', 'Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS'] },
+  { id: 'dwm-erp', file: 'DWM-ERP.xml', icone: 'grafico', stack: ['Python', 'PostgreSQL'] },
+  { id: 'emitaqui', file: 'Emitaqui.xml', icone: 'nota', stack: ['C#', '.NET', 'Avalonia', 'SQLite', 'Docker'] },
+  { id: 'nfse-nacional', file: 'NFSe-Nacional.xml', icone: 'documento', stack: ['Python', 'JavaScript', 'Docker'] },
   { id: 'emissor-cte', file: 'Emissor-CTe.xml', icone: 'caminhao', stack: ['XML', 'Certificado A1', 'Web Services SEFAZ'] },
-  { id: 'captura-xml', file: 'Captura-XML.xml', icone: 'codigo', stack: ['Python', 'Web Services SEFAZ'] }, // stack: confirmar
+  { id: 'captura-xml', file: 'Captura-XML.xml', icone: 'codigo', stack: ['Python', 'Tauri', 'React', 'TypeScript'] },
+  { id: 'erp-financeiro', file: 'ERP-Financeiro.xml', icone: 'carteira', stack: ['Python', 'PyQt5', 'SQLite'] },
+  { id: 'sass', file: 'SASS.xml', icone: 'predio', stack: ['Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS'] },
+  { id: 'apptype', file: 'AppType.xml', icone: 'carro', stack: ['React Native', 'Expo', 'FastAPI', 'Python', 'PostgreSQL', 'Next.js'] },
+  { id: 'confeitaria', file: 'Confeitaria.xml', icone: 'bolo', stack: ['Tauri', 'React', 'TypeScript', 'Python', 'SQLite'] },
   { id: 'ia', file: 'IA-Aplicada.xml', icone: 'brilho', stack: ['IA generativa', 'Engenharia de prompt'] },
 ]
 
@@ -183,7 +191,18 @@ const projectText: Record<Lang, Record<string, ProjectText>> = {
       summary: 'Sistema completo para gestão de clínicas, com aplicativo mobile e inteligência artificial integrada.',
       listTitle: 'Principais recursos',
       unidade: 'recursos',
-      items: ['Agenda médica', 'Pacientes', 'Especialidades', 'Financeiro', 'Dashboard', 'Inteligência artificial', 'Aplicativo mobile'],
+      items: [
+        'Agenda médica',
+        'Pacientes',
+        'Prontuário eletrônico',
+        'Especialidades',
+        'Financeiro',
+        'Dashboard',
+        'Perfis de acesso',
+        'Auditoria',
+        'Inteligência artificial',
+        'Aplicativo mobile',
+      ],
     },
     'dwm-erp': {
       title: 'DWM ERP',
@@ -192,6 +211,41 @@ const projectText: Record<Lang, Record<string, ProjectText>> = {
       listTitle: 'Módulos',
       unidade: 'módulos',
       items: ['Financeiro', 'Compras', 'Vendas', 'Estoque', 'Cadastros', 'Relatórios', 'Dashboard executivo', 'IA integrada'],
+    },
+    emitaqui: {
+      title: 'Emitaqui',
+      kind: 'Emissor de NF-e e NFC-e',
+      summary:
+        'Emissor de NF-e (modelo 55) e NFC-e (modelo 65) no leiaute 4.00, já preparado para a Reforma Tributária do Consumo. Tem versão web e aplicativo para Windows e macOS.',
+      listTitle: 'Recursos',
+      unidade: 'recursos',
+      items: [
+        'Emissão de NF-e e NFC-e',
+        'Cálculo de IBS, CBS e IS',
+        'Validação contra o XSD oficial',
+        'Assinatura digital do XML',
+        'Contingência off-line',
+        'Cancelamento e carta de correção',
+        'Recebimento de documentos fiscais',
+        'Caixa (PDV)',
+        'Mais de 4.400 testes automatizados',
+      ],
+    },
+    'nfse-nacional': {
+      title: 'NFS-e Nacional',
+      kind: 'Emissor de NFS-e',
+      summary:
+        'Emissor de NFS-e no padrão nacional, independente de ERP. Está na primeira versão: já emitiu, consultou e cancelou notas no ambiente de testes do governo.',
+      listTitle: 'Recursos',
+      unidade: 'recursos',
+      items: [
+        'Emissão, consulta e cancelamento',
+        'Validação da nota sem rede e sem certificado',
+        'Certificado digital A1',
+        'Proteção contra emissão em duplicidade',
+        'Reconciliação com o ambiente nacional',
+        'Linha de comando e interface web',
+      ],
     },
     'emissor-cte': {
       title: 'Emissor CT-e',
@@ -204,10 +258,68 @@ const projectText: Record<Lang, Record<string, ProjectText>> = {
     'captura-xml': {
       title: 'Captura Inteligente de XML',
       kind: 'Automação fiscal',
-      summary: 'Consulta automática de documentos fiscais, com integração completa aos Web Services da SEFAZ.',
-      listTitle: 'Documentos consultados',
-      unidade: 'tipos de documento',
-      items: ['NF-e', 'NFC-e', 'CT-e', 'NFS-e'],
+      summary: 'Consulta, download e organização automática de documentos fiscais direto da SEFAZ, em aplicativo desktop.',
+      listTitle: 'Recursos',
+      unidade: 'recursos',
+      items: ['NF-e', 'NFC-e', 'CT-e', 'NFS-e', 'Download e organização automática', 'Aplicativo com atualização automática'],
+    },
+    'erp-financeiro': {
+      title: 'ERP Financeiro',
+      kind: 'Gestão financeira',
+      summary: 'Sistema de gestão financeira para desktop, com contas a pagar e a receber, conciliação bancária e relatórios.',
+      listTitle: 'Recursos',
+      unidade: 'recursos',
+      items: [
+        'Contas a pagar e a receber',
+        'Contas bancárias com saldo atualizado',
+        'Importação e conciliação de OFX',
+        'Fluxo de caixa e DRE',
+        'Exportação em PDF, Excel e CSV',
+        'Integração com NFS-e',
+        'Permissões por usuário e empresa',
+      ],
+    },
+    sass: {
+      title: 'SASS',
+      kind: 'Investimentos imobiliários',
+      summary:
+        'Gestão de investimentos imobiliários em dois módulos que conversam entre si: participação em obras por administração e leilão de imóveis.',
+      listTitle: 'Recursos',
+      unidade: 'recursos',
+      items: [
+        'Obras: aportes, custos e execução financeira',
+        'Venda e aluguel com resultado e ROI',
+        'Locações, baixas e reajustes',
+        'Leilão: custos de aquisição e reforma',
+        'Simulador de arremate',
+        'Painel consolidado e relatórios',
+      ],
+    },
+    apptype: {
+      title: 'AppType',
+      kind: 'Mobilidade urbana',
+      summary:
+        'Plataforma de transporte por aplicativo, com app para passageiros e motoristas e painel administrativo. O motorista paga uma assinatura e fica com 100% da tarifa.',
+      listTitle: 'Recursos',
+      unidade: 'recursos',
+      items: [
+        'Corridas em tempo real',
+        'Geolocalização e rotas',
+        'Pagamento por PIX e cartão',
+        'Carteira digital do motorista',
+        'Assinatura de motoristas',
+        'Chat, avaliações e cupons',
+        'Login em duas etapas',
+        'Painel administrativo',
+      ],
+    },
+    confeitaria: {
+      title: 'Confeitaria',
+      kind: 'Gestão de pedidos',
+      summary: 'Sistema de pedidos, produção e estoque para confeitarias, em aplicativo desktop, com painel da cozinha pelo celular.',
+      listTitle: 'Recursos',
+      unidade: 'recursos',
+      items: ['Pedidos e clientes', 'Produção', 'Estoque', 'Painel da cozinha no celular', 'Relatórios', 'Backup do banco de dados', 'Nome e logo de cada cliente'],
     },
     ia: {
       title: 'Inteligência Artificial',
@@ -226,7 +338,18 @@ const projectText: Record<Lang, Record<string, ProjectText>> = {
       summary: 'A complete clinic management system, with a mobile app and built-in artificial intelligence.',
       listTitle: 'Main features',
       unidade: 'features',
-      items: ['Medical schedule', 'Patients', 'Specialties', 'Finance', 'Dashboard', 'Artificial intelligence', 'Mobile app'],
+      items: [
+        'Medical schedule',
+        'Patients',
+        'Electronic health records',
+        'Specialties',
+        'Finance',
+        'Dashboard',
+        'Access roles',
+        'Audit log',
+        'Artificial intelligence',
+        'Mobile app',
+      ],
     },
     'dwm-erp': {
       title: 'DWM ERP',
@@ -235,6 +358,41 @@ const projectText: Record<Lang, Record<string, ProjectText>> = {
       listTitle: 'Modules',
       unidade: 'modules',
       items: ['Finance', 'Purchasing', 'Sales', 'Inventory', 'Records', 'Reports', 'Executive dashboard', 'Built-in AI'],
+    },
+    emitaqui: {
+      title: 'Emitaqui',
+      kind: 'NF-e and NFC-e issuer',
+      summary:
+        'An issuer for the Brazilian electronic invoices NF-e (model 55) and NFC-e (model 65), layout 4.00, already prepared for the Consumption Tax Reform. It has a web version and an app for Windows and macOS.',
+      listTitle: 'Features',
+      unidade: 'features',
+      items: [
+        'NF-e and NFC-e issuing',
+        'IBS, CBS and IS tax calculation',
+        'Validation against the official XSD',
+        'XML digital signature',
+        'Offline contingency mode',
+        'Cancellation and correction letter',
+        'Receiving tax documents',
+        'Point of sale (POS)',
+        'Over 4,400 automated tests',
+      ],
+    },
+    'nfse-nacional': {
+      title: 'NFS-e Nacional',
+      kind: 'NFS-e issuer',
+      summary:
+        'An issuer for NFS-e, the Brazilian service invoice, in the national standard and independent of any ERP. It is at its first version: it has already issued, queried and cancelled invoices in the government test environment.',
+      listTitle: 'Features',
+      unidade: 'features',
+      items: [
+        'Issuing, querying and cancelling',
+        'Invoice validation with no network or certificate',
+        'A1 digital certificate',
+        'Protection against duplicate issuing',
+        'Reconciliation with the national environment',
+        'Command line and web interface',
+      ],
     },
     'emissor-cte': {
       title: 'CT-e Issuer',
@@ -248,11 +406,66 @@ const projectText: Record<Lang, Record<string, ProjectText>> = {
     'captura-xml': {
       title: 'Smart XML Capture',
       kind: 'Tax automation',
-      summary: 'Automatic retrieval of Brazilian tax documents, fully integrated with the SEFAZ web services.',
-      listTitle: 'Documents retrieved',
-      unidade: 'document types',
-      items: ['NF-e', 'NFC-e', 'CT-e', 'NFS-e'],
-      stack: ['Python', 'SEFAZ web services'],
+      summary: 'Automatic retrieval, download and organization of Brazilian tax documents straight from SEFAZ, in a desktop app.',
+      listTitle: 'Features',
+      unidade: 'features',
+      items: ['NF-e', 'NFC-e', 'CT-e', 'NFS-e', 'Automatic download and organization', 'App with automatic updates'],
+    },
+    'erp-financeiro': {
+      title: 'ERP Financeiro',
+      kind: 'Financial management',
+      summary: 'A desktop financial management system, with accounts payable and receivable, bank reconciliation and reports.',
+      listTitle: 'Features',
+      unidade: 'features',
+      items: [
+        'Accounts payable and receivable',
+        'Bank accounts with up-to-date balances',
+        'OFX import and reconciliation',
+        'Cash flow and income statement',
+        'Export to PDF, Excel and CSV',
+        'NFS-e integration',
+        'Permissions by user and company',
+      ],
+    },
+    sass: {
+      title: 'SASS',
+      kind: 'Real estate investments',
+      summary: 'Real estate investment management in two modules that work together: shares in construction projects and property auctions.',
+      listTitle: 'Features',
+      unidade: 'features',
+      items: [
+        'Construction: contributions, costs and financial progress',
+        'Sale and rental with result and ROI',
+        'Leases, payments and rent adjustments',
+        'Auctions: acquisition and renovation costs',
+        'Bid simulator',
+        'Consolidated dashboard and reports',
+      ],
+    },
+    apptype: {
+      title: 'AppType',
+      kind: 'Urban mobility',
+      summary: 'A ride-hailing platform, with an app for passengers and drivers and an admin panel. Drivers pay a subscription and keep 100% of the fare.',
+      listTitle: 'Features',
+      unidade: 'features',
+      items: [
+        'Real-time rides',
+        'Geolocation and routes',
+        'Payment by PIX and card',
+        'Driver digital wallet',
+        'Driver subscriptions',
+        'Chat, ratings and coupons',
+        'Two-step login',
+        'Admin panel',
+      ],
+    },
+    confeitaria: {
+      title: 'Confeitaria',
+      kind: 'Order management',
+      summary: 'An orders, production and inventory system for bakeries, as a desktop app, with a kitchen panel on the phone.',
+      listTitle: 'Features',
+      unidade: 'features',
+      items: ['Orders and customers', 'Production', 'Inventory', 'Kitchen panel on the phone', 'Reports', 'Database backup', 'Each client’s own name and logo'],
     },
     ia: {
       title: 'Artificial Intelligence',
@@ -273,9 +486,17 @@ const cache: Partial<Record<Lang, Content>> = {}
 
 /** Conteúdo completo no idioma pedido. */
 export function getContent(lang: Lang): Content {
-  cache[lang] ??= {
-    profile: { ...site, ...profileText[lang] },
-    projects: projectBase.map((p) => ({ ...p, ...projectText[lang][p.id] })),
+  if (!cache[lang]) {
+    const text = profileText[lang]
+    cache[lang] = {
+      profile: {
+        ...site,
+        ...text,
+        // "{projetos}" vira a quantidade de projetos da lista, para o número nunca ficar desatualizado
+        numeros: text.numeros.map((n) => ({ ...n, valor: n.valor.replace('{projetos}', String(projectBase.length)) })),
+      },
+      projects: projectBase.map((p) => ({ ...p, ...projectText[lang][p.id] })),
+    }
   }
   return cache[lang]
 }
