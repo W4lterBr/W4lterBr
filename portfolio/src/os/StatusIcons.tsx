@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react'
-import { isMuted, playSound, setMuted, subscribeMuted } from './sounds'
+import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react'
+import { getVolume, playSound, setVolume, subscribeVolume } from './sounds'
 
 type Notify = (title: string, text: string) => void
 
@@ -111,23 +111,94 @@ export function Wifi({ notify }: { notify: Notify }) {
   )
 }
 
-/** Liga e desliga os sons da interface (avisos, abrir e fechar janelas). A música tem controle próprio no player. */
-export function SoundToggle() {
-  const muted = useSyncExternalStore(subscribeMuted, isMuted)
-  const toggle = () => {
-    setMuted(!muted)
-    if (muted) playSound('open')
+/**
+ * Volume do sistema: vale para a música e para os sons da interface.
+ * Clique no ícone abre o controle deslizante; a roda do mouse sobre ele sobe e desce de 5 em 5.
+ */
+export function VolumeControl() {
+  const volume = useSyncExternalStore(subscribeVolume, getVolume)
+  const [open, setOpen] = useState(false)
+  const root = useRef<HTMLDivElement>(null)
+  const beforeMute = useRef(volume || 70)
+
+  // Fecha com Esc ou clique fora. (Em captura, para o Esc não fechar também a janela da frente.)
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      e.stopImmediatePropagation()
+      setOpen(false)
+    }
+    const onDown = (e: PointerEvent) => {
+      if (!root.current?.contains(e.target as Node)) setOpen(false)
+    }
+    window.addEventListener('keydown', onKey, true)
+    window.addEventListener('pointerdown', onDown)
+    return () => {
+      window.removeEventListener('keydown', onKey, true)
+      window.removeEventListener('pointerdown', onDown)
+    }
+  }, [open])
+
+  const toggleMute = () => {
+    if (volume > 0) {
+      beforeMute.current = volume
+      setVolume(0)
+    } else {
+      setVolume(beforeMute.current)
+      playSound('open')
+    }
   }
+
+  const waves = volume === 0 ? 0 : volume < 50 ? 1 : 2
+  const icon = (
+    <svg viewBox="0 0 16 12" aria-hidden>
+      <path d="M1 4h2.500L7 1v10L3.500 8H1z" fill="currentColor" />
+      {waves === 0 && <path d="M10 3.500l4 5M14 3.500l-4 5" fill="none" stroke="currentColor" strokeWidth="1.500" strokeLinecap="round" />}
+      {waves >= 1 && <path d="M9.500 3.500a3.500 3.500 0 0 1 0 5" fill="none" stroke="currentColor" strokeWidth="1.400" strokeLinecap="round" />}
+      {waves >= 2 && <path d="M11.500 1.500a6 6 0 0 1 0 9" fill="none" stroke="currentColor" strokeWidth="1.400" strokeLinecap="round" />}
+    </svg>
+  )
+
   return (
-    <button type="button" className="bar-btn bar-sound" aria-pressed={!muted} aria-label={muted ? 'Ligar sons do sistema' : 'Desligar sons do sistema'} title={muted ? 'Sons do sistema desligados' : 'Sons do sistema ligados'} onClick={toggle}>
-      <svg viewBox="0 0 16 12" aria-hidden>
-        <path d="M1 4h2.500L7 1v10L3.500 8H1z" fill="currentColor" />
-        {muted ? (
-          <path d="M10 3.500l4 5M14 3.500l-4 5" fill="none" stroke="currentColor" strokeWidth="1.500" strokeLinecap="round" />
-        ) : (
-          <path d="M9.500 3.500a3.500 3.500 0 0 1 0 5M11.500 1.500a6 6 0 0 1 0 9" fill="none" stroke="currentColor" strokeWidth="1.400" strokeLinecap="round" />
-        )}
-      </svg>
-    </button>
+    <div className="vol" ref={root} onWheel={(e) => setVolume(volume + (e.deltaY < 0 ? 5 : -5))}>
+      <button
+        type="button"
+        className="bar-btn bar-sound"
+        aria-expanded={open}
+        aria-controls="vol-pop"
+        aria-label={`Volume: ${volume}%. Abrir controle de volume.`}
+        title={`Volume: ${volume}%`}
+        onClick={() => setOpen((o) => !o)}
+      >
+        {icon}
+      </button>
+
+      <div id="vol-pop" className={`pop vol-pop${open ? ' is-open' : ''}`} inert={!open}>
+        <p className="vol-head">
+          <span>Som</span>
+          <span>{volume}%</span>
+        </p>
+        <div className="vol-row">
+          <button type="button" className="vol-mute" aria-label={volume === 0 ? 'Ativar som' : 'Silenciar'} title={volume === 0 ? 'Ativar som' : 'Silenciar'} onClick={toggleMute}>
+            {icon}
+          </button>
+          <input
+            id="vol-range"
+            type="range"
+            min={0}
+            max={100}
+            step={1}
+            value={volume}
+            aria-label="Volume"
+            style={{ '--v': `${volume}%` } as CSSProperties}
+            onChange={(e) => setVolume(Number(e.target.value))}
+            // um toque curto ao soltar, para ouvir o nível escolhido
+            onPointerUp={() => playSound('open')}
+            onKeyUp={() => playSound('open')}
+          />
+        </div>
+      </div>
+    </div>
   )
 }
