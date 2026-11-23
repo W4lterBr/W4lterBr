@@ -3,7 +3,7 @@
 <!-- ===================================================== -->
 
 <p align="center">
-  <img src="./assets/banner.png" width="100%" alt="DWM Systems Developer"/>
+  <a href="https://waltermanoel.netlify.app"><img src="./assets/banner.png" width="100%" alt="Walter Manoel, desenvolvedor Full Stack na DWM Systems"/></a>
 </p>
 
 <h1 align="center">Walter Manoel</h1>

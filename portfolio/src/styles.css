@@ -1,11 +1,12 @@
 /*
   DWM OS
-  Visual no estilo iOS/macOS: papel de parede claro em degradê, widgets de cantos bem arredondados,
+  Visual no estilo iOS/macOS: papel de parede com uma paisagem de Mato Grosso do Sul, widgets de cantos bem arredondados,
   vidro fosco na barra, no dock e nos avisos, janelas com os três botões coloridos.
   Paleta única: tudo o que tem cor usa a família do violeta da DWM Systems (--accent e seus tons).
   As exceções: os ícones do dock (cada app tem a sua cor) e as cores que carregam significado, que são
   os três botões da janela, bateria fraca ou carregando, erro e sucesso no terminal, e as bandeiras do menu de idioma.
-  Para trocar a cor do site, mude --accent, --accent-strong, --accent-soft, --c1 e --c2, e os tons do .wallpaper.
+  Para trocar a cor do site, mude --accent, --accent-strong, --accent-soft, --c1 e --c2.
+  As cores do papel de parede ficam em scripts/paisagem.mjs, que gera src/assets/paisagem.svg e nuvens.svg.
 */
 :root {
   --accent: #7c4ddb;
@@ -46,7 +47,7 @@ body,
 body {
   margin: 0;
   overflow: hidden;
-  background: #ede6fa;
+  background: #d3cbe2;
   color: var(--label);
   font-family: var(--ui);
   font-size: 15px;
@@ -100,67 +101,34 @@ button {
   inset: 0;
   display: block;
   overflow: hidden;
-  background: linear-gradient(#f5f0fd, #e7dcf9);
+  /* as cores do céu e do chão aparecem só enquanto as imagens carregam */
+  background: linear-gradient(#bfb9d6, #e6d9e3 55%, #8879ae 72%, #241c42 85%);
 }
 .wallpaper-lock {
   position: absolute;
   z-index: -1;
 }
-.blob {
+/* a paisagem e as nuvens têm o mesmo enquadramento: cobrem a tela presas pela base, onde ficam o chão e o dock */
+.wp-camada {
   position: absolute;
-  display: block;
-  border-radius: 50%;
-  filter: blur(70px);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 100%;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.wp-nuvens {
   will-change: transform;
-  animation: drift 30s ease-in-out infinite alternate;
+  animation: nuvens 80s ease-in-out infinite alternate;
 }
-.blob-rosa {
-  left: -12vmax;
-  top: -10vmax;
-  width: 52vmax;
-  height: 46vmax;
-  background: #ecd9fb;
-  --dx: 10vw;
-  --dy: 9vh;
-  --s: 1.18;
-  animation-duration: 26s;
-}
-.blob-azul {
-  right: -14vmax;
-  top: -14vmax;
-  width: 50vmax;
-  height: 48vmax;
-  background: #d9d4ff;
-  --dx: -9vw;
-  --dy: 12vh;
-  --s: 1.12;
-  animation-duration: 34s;
-}
-.blob-violeta {
-  left: 28vw;
-  bottom: -26vmax;
-  width: 62vmax;
-  height: 50vmax;
-  background: #cdb6f8;
-  --dx: -12vw;
-  --dy: -10vh;
-  --s: 1.2;
-  animation-duration: 40s;
-}
-.blob-lilas {
-  left: -6vw;
-  bottom: -8vmax;
-  width: 34vmax;
-  height: 30vmax;
-  background: #e9d2ff;
-  --dx: 16vw;
-  --dy: -8vh;
-  --s: 0.9;
-  animation-duration: 46s;
-}
-@keyframes drift {
+@keyframes nuvens {
+  from {
+    transform: translateX(-2.5%);
+  }
   to {
-    transform: translate(var(--dx), var(--dy)) scale(var(--s));
+    transform: translateX(2.5%);
   }
 }
 
@@ -946,7 +914,7 @@ button {
   gap: 8px;
   padding: 10px 12px 6px;
   border-radius: 26px;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.66);
   backdrop-filter: blur(24px) saturate(1.6);
   box-shadow: 0 16px 36px -18px rgba(40, 20, 90, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.65);
 }
@@ -1212,41 +1180,19 @@ button {
   background: var(--card);
   border-bottom: 1px solid var(--sep);
 }
-/* capa: as mesmas manchas de cor do papel de parede, paradas */
+/* capa: a mesma paisagem do papel de parede, parada e recortada na linha do horizonte */
 .ab-cover {
   position: relative;
   height: 132px;
   overflow: hidden;
-  background: linear-gradient(120deg, #8a61e8, #a57af0 55%, #7a56e0);
+  background: #d3cbe2;
 }
-.ab-cover span {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(34px);
-}
-.ab-cover span:nth-child(1) {
-  left: -40px;
-  top: -70px;
-  width: 280px;
-  height: 220px;
-  background: #c9a6ff;
-  opacity: 0.7;
-}
-.ab-cover span:nth-child(2) {
-  right: 8%;
-  top: -40px;
-  width: 300px;
-  height: 200px;
-  background: #b79cf7;
-  opacity: 0.7;
-}
-.ab-cover span:nth-child(3) {
-  left: 38%;
-  bottom: -110px;
-  width: 320px;
-  height: 200px;
-  background: #5a32bd;
-  opacity: 0.55;
+.wp-horizonte {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 64%;
 }
 .ab-id {
   display: grid;
@@ -1863,20 +1809,21 @@ button {
   outline: none;
 }
 .lock-foot:focus-visible .lock-handle {
-  outline: 3px solid var(--accent);
+  outline: 3px solid rgba(255, 255, 255, 0.85);
   outline-offset: 5px;
 }
+/* a dica fica sobre o chão escuro da paisagem */
 .lock-hint {
   font-size: 1rem;
   font-weight: 500;
-  color: #4b3f6b;
+  color: rgba(255, 255, 255, 0.9);
 }
 .lock-handle {
   display: block;
   width: 140px;
   height: 5px;
   border-radius: 3px;
-  background: rgba(42, 27, 87, 0.55);
+  background: rgba(255, 255, 255, 0.75);
 }
 
 /* ---------- telas estreitas: janelas ocupam a tela toda ---------- */
@@ -2112,7 +2059,7 @@ button {
   .bar-battery-fill {
     transition: none;
   }
-  .blob,
+  .wp-nuvens,
   .lock-foot,
   .bar-wifi .wifi-arc,
   .win,

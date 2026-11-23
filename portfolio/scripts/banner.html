@@ -1,0 +1,25 @@
+<!doctype html>
+<!-- Fonte do banner do perfil no GitHub (assets/banner.png, na raiz do repositório). Gere de novo com o comando descrito no README. -->
+<html lang="pt-BR">
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: Inter; font-weight: 100 900; src: url(../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2); }
+  html, body { margin: 0; width: 1600px; height: 440px; overflow: hidden; background: transparent; }
+  body { font-family: Inter, 'Segoe UI', sans-serif; }
+  /* cantos arredondados; fora deles a imagem fica transparente e combina com o tema claro e o escuro do GitHub */
+  .quadro { position: relative; width: 1600px; height: 440px; overflow: hidden; border-radius: 28px; background: #bfb9d6; }
+  /* a paisagem em tamanho natural (1600 x 1000), deslocada para o horizonte ficar a dois terços da altura */
+  img { position: absolute; left: 0; top: -330px; width: 1600px; height: 1000px; }
+  .texto { position: absolute; inset: 64px 0 auto; text-align: center; }
+  h1 { margin: 0; font-size: 92px; font-weight: 700; letter-spacing: -0.035em; line-height: 1; color: #2a1b57; }
+  p { margin: 16px 0 0; font-size: 34px; font-weight: 500; color: #4b3f6b; }
+</style>
+<div class="quadro">
+  <img src="../src/assets/paisagem.svg" alt="">
+  <img src="../src/assets/nuvens.svg" alt="">
+  <div class="texto">
+    <h1>Walter Manoel</h1>
+    <p>Desenvolvedor Full Stack, DWM Systems</p>
+  </div>
+</div>
+</html>

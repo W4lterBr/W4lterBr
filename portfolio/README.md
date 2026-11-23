@@ -28,14 +28,35 @@ e publicar `portfolio/dist`. Cada push em `main` atualiza o site; cada pull requ
 
 Se o endereço do site mudar (outro nome na Netlify ou domínio próprio), atualize `og:url` e `og:image` em `index.html`.
 
-## Imagem de prévia do link
+## Papel de parede
 
-`public/og.png` é gerada a partir de `scripts/og.html` com o Chrome:
+O fundo é uma paisagem de Mato Grosso do Sul numa tarde de céu com névoa: as chapadas da Serra de Maracaju,
+a planície alagada do Pantanal e carandás no primeiro plano. Ela é desenhada por código em `scripts/paisagem.mjs`,
+que gera `src/assets/paisagem.svg` (a cena) e `src/assets/nuvens.svg` (as nuvens, que passam devagar).
+Cores, posição do sol, chapadas e carandás são constantes do script. Depois de mudar, rode:
+
+```bash
+node scripts/paisagem.mjs
+```
+
+A mesma cena aparece na capa da janela Sobre mim, na imagem de prévia do link e no banner do perfil no GitHub.
+Depois de mudar a paisagem, gere essas duas imagens de novo (comandos abaixo).
+
+## Imagem de prévia do link e banner do perfil
+
+`public/og.png` é gerada a partir de `scripts/og.html`, e o banner do README do perfil (`assets/banner.png`, na raiz
+do repositório) a partir de `scripts/banner.html`, os dois com o Chrome:
 
 ```bash
 chrome --headless=new --hide-scrollbars --window-size=1200,630 --allow-file-access-from-files \
   --screenshot=public/og.png scripts/og.html
+
+chrome --headless=new --hide-scrollbars --window-size=1600,440 --force-device-scale-factor=1.25 \
+  --default-background-color=00000000 --allow-file-access-from-files \
+  --screenshot=../assets/banner.png scripts/banner.html
 ```
+
+O `og.png` precisa ficar abaixo de uns 300 KB, senão o WhatsApp pode não mostrar a prévia.
 
 ## Música, sons e barra do topo
 
@@ -58,4 +79,5 @@ Na primeira visita vale o idioma do navegador (português para quem navega em po
 ## Cores
 
 A paleta é uma só: a família do violeta definida no topo de `src/styles.css` (`--accent`, `--accent-strong`,
-`--accent-soft`, `--c1`, `--c2`). Para trocar a cor do site, mude essas variáveis e os tons do `.wallpaper`.
+`--accent-soft`, `--c1`, `--c2`). Para trocar a cor do site, mude essas variáveis. As cores do papel de parede
+ficam em `scripts/paisagem.mjs` (veja "Papel de parede").

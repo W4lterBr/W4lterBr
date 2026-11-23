@@ -1,6 +1,7 @@
 import { useI18n } from '../i18n'
 import { GitHubIcon } from '../os/icons'
 import { TechList } from '../os/tech'
+import { Horizonte } from '../os/Wallpaper'
 import type { AppId } from '../os/windows'
 
 export function Sobre({ openApp }: { openApp: (id: AppId) => void }) {
@@ -13,9 +14,7 @@ export function Sobre({ openApp }: { openApp: (id: AppId) => void }) {
     <article className="ab">
       <header className="ab-hero">
         <div className="ab-cover" aria-hidden>
-          <span />
-          <span />
-          <span />
+          <Horizonte />
         </div>
         <div className="ab-id">
           <span className="avatar ab-avatar" aria-hidden>{initials}</span>
