@@ -246,7 +246,7 @@ export default function App() {
                   aria-pressed={top?.id === id}
                   onClick={() => (top?.id === id ? minimizeApp(id) : openApp(id))}
                 >
-                  <span className="dock-tile">
+                  <span className={`dock-tile tile-${id}`}>
                     <AppIcon id={id} />
                   </span>
                   <span className="dock-label">{t(`app.${id}`)}</span>
@@ -255,7 +255,7 @@ export default function App() {
             })}
             <span className="dock-sep" aria-hidden />
             <a className="dock-item" href={data.profile.contact.github} target="_blank" rel="noreferrer">
-              <span className="dock-tile">
+              <span className="dock-tile tile-github">
                 <GitHubIcon />
               </span>
               <span className="dock-label">GitHub</span>
