@@ -3,8 +3,8 @@
   Visual no estilo iOS/macOS: papel de parede claro em degradê, widgets de cantos bem arredondados,
   vidro fosco na barra, no dock e nos avisos, janelas com os três botões coloridos.
   Paleta única: tudo o que tem cor usa a família do violeta da DWM Systems (--accent e seus tons).
-  As exceções são as que carregam significado: os três botões da janela, bateria fraca ou carregando,
-  mensagens de erro e de sucesso no terminal, e as bandeiras do menu de idioma.
+  As exceções: os ícones do dock (cada app tem a sua cor) e as cores que carregam significado, que são
+  os três botões da janela, bateria fraca ou carregando, erro e sucesso no terminal, e as bandeiras do menu de idioma.
   Para trocar a cor do site, mude --accent, --accent-strong, --accent-soft, --c1 e --c2, e os tons do .wallpaper.
 */
 :root {
@@ -969,7 +969,6 @@ button {
 .dock-tile {
   display: grid;
   place-items: center;
-  background: linear-gradient(160deg, var(--c1), var(--c2));
   width: 54px;
   height: 54px;
   border-radius: 15px;
@@ -980,6 +979,23 @@ button {
 .dock-item:hover .dock-tile,
 .dock-item:focus-visible .dock-tile {
   transform: translateY(-6px) scale(1.07);
+}
+/* os ícones do dock têm cada um a sua cor, como os apps de um celular */
+.tile-sobre {
+  background: linear-gradient(160deg, #a983f5, #6a3fd0);
+}
+.tile-projetos {
+  background: linear-gradient(160deg, #6fb6ff, #2f6fe0);
+}
+.tile-terminal {
+  background: linear-gradient(160deg, #3d3a4d, #17151f);
+}
+.tile-contato {
+  background: linear-gradient(160deg, #ff9ac6, #e0457e);
+}
+.tile-github {
+  background: #fff;
+  color: #17151f;
 }
 .dock-label {
   white-space: nowrap;
@@ -1811,7 +1827,28 @@ button {
 .lock-role {
   color: var(--label-2);
 }
+/* a dica dá dois pulinhos de tempos em tempos, como um aviso chamando atenção */
+@keyframes hint-bounce {
+  0%,
+  58%,
+  100% {
+    transform: translateY(0);
+  }
+  68% {
+    transform: translateY(-12px);
+  }
+  78% {
+    transform: translateY(0);
+  }
+  86% {
+    transform: translateY(-5px);
+  }
+  93% {
+    transform: translateY(0);
+  }
+}
 .lock-foot {
+  animation: hint-bounce 2.8s cubic-bezier(0.3, 0.6, 0.4, 1) 1s infinite;
   display: grid;
   justify-items: center;
   gap: 16px;
@@ -2076,6 +2113,7 @@ button {
     transition: none;
   }
   .blob,
+  .lock-foot,
   .bar-wifi .wifi-arc,
   .win,
   .win.is-leaving-close,

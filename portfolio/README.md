@@ -40,7 +40,8 @@ chrome --headless=new --hide-scrollbars --window-size=1200,630 --allow-file-acce
 ## Música, sons e barra do topo
 
 - **Música:** o player usa o SoundCloud. Em `src/data/profile.ts`, troque `music.soundcloud` pelo link de uma playlist,
-  faixa ou perfil. Nada do SoundCloud é carregado antes do primeiro clique em tocar.
+  faixa ou perfil. O player carrega em segundo plano logo depois da página, sem tocar, para já mostrar o nome e a capa
+  da faixa certa; `music.comecarNaFaixa` diz em qual faixa da playlist ele começa.
 - **Sons da interface:** são sintetizados em `src/os/sounds.ts` (não há arquivos de áudio). O ícone de alto-falante
   da barra abre o controle de volume, que vale para os sons e para a música.
 - **Bateria:** é de enfeite. Perde 1% a cada 15 s (`DRAIN_EVERY_MS` em `src/os/StatusIcons.tsx`) e recarrega com um clique.

@@ -21,11 +21,12 @@ export const site = {
 
   // Player de música (barra do topo e tela de bloqueio).
   // Cole em `soundcloud` o link de uma playlist, faixa ou perfil do SoundCloud.
-  // `titulo` e `artista` aparecem só até a primeira faixa carregar.
+  // O nome, o artista e a capa mostrados no player vêm da própria faixa.
   music: {
-    titulo: 'lofi hip hop',
-    artista: 'Chillhop Music',
     soundcloud: 'https://soundcloud.com/chillhopdotcom/sets/lofihiphop',
+    // Faixa da playlist em que o player começa (1 = primeira). Nesta playlist as duas primeiras são álbuns
+    // inteiros de mais de 20 minutos, em que a música muda e o nome não; por isso começa na terceira.
+    comecarNaFaixa: 3,
   },
 }
 

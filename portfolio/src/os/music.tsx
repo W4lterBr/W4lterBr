@@ -6,12 +6,13 @@ import { getVolume, subscribeVolume } from './sounds'
 /**
  * Música do sistema. O áudio vem do player oficial do SoundCloud, que fica invisível na página
  * e é comandado pela Widget API; os controles que aparecem (barra do topo e tela de bloqueio) são nossos.
- * Nada do SoundCloud é carregado até o primeiro clique em tocar.
+ * O player é carregado em segundo plano logo depois da página, sem tocar nada: assim o nome e a capa
+ * mostrados antes do play já são os da faixa que vai tocar, e não o nome da playlist.
  */
 
 type Sound = { title: string; permalink_url: string; artwork_url: string | null; user: { username: string; avatar_url: string } }
 type Widget = {
-  bind: (event: string, cb: (data: { currentPosition: number }) => void) => void
+  bind: (event: string, cb: (data: { currentPosition: number; soundId?: number }) => void) => void
   toggle: () => void
   play: () => void
   next: () => void
@@ -71,13 +72,24 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const [started, setStarted] = useState(false)
   const [status, setStatus] = useState<Music['status']>('idle')
   const [playing, setPlaying] = useState(false)
-  const [track, setTrack] = useState({ title: site.music.titulo, artist: site.music.artista, cover: null as string | null, link: source })
+  // vazio até a primeira faixa carregar; os componentes mostram um texto neutro nesse intervalo
+  const [track, setTrack] = useState({ title: '', artist: '', cover: null as string | null, link: source })
   const [position, setPosition] = useState(0)
   const [duration, setDuration] = useState(0)
   const volume = useSyncExternalStore(subscribeVolume, getVolume)
   const frame = useRef<HTMLIFrameElement>(null)
   const widget = useRef<Widget | null>(null)
-  const pending = useRef<'next' | 'prev' | null>(null)
+  const ready = useRef(false)
+  // ação pedida antes de o player ficar pronto; é executada assim que ele carrega
+  const pending = useRef<'play' | 'next' | 'prev' | null>(null)
+  // id da faixa cujo nome está na tela, para perceber quando a faixa muda
+  const shownId = useRef<number | null>(null)
+
+  // Carrega o player pouco depois da página, sem tocar.
+  useEffect(() => {
+    const id = window.setTimeout(() => setStarted(true), 1200)
+    return () => window.clearTimeout(id)
+  }, [])
 
   useEffect(() => {
     if (!started || !frame.current) return
@@ -99,21 +111,34 @@ export function MusicProvider({ children }: { children: ReactNode }) {
           w.getDuration(setDuration)
         }
 
+        // O nome na tela acompanha a faixa que está tocando de fato: sempre que o id muda, busca de novo.
+        const follow = (soundId?: number) => {
+          if (soundId === undefined || soundId === shownId.current) return
+          shownId.current = soundId
+          refresh()
+        }
+
         w.bind(E.READY, () => {
+          ready.current = true
           setStatus('ready')
           w.setVolume(getVolume())
           refresh()
+          if (pending.current === 'play') w.play()
           if (pending.current === 'next') w.next()
           if (pending.current === 'prev') w.prev()
           pending.current = null
         })
-        w.bind(E.PLAY, () => {
+        w.bind(E.PLAY, (data) => {
           setPlaying(true)
+          shownId.current = data.soundId ?? null
           refresh()
         })
         w.bind(E.PAUSE, () => setPlaying(false))
         w.bind(E.FINISH, () => setPlaying(false))
-        w.bind(E.PLAY_PROGRESS, (data) => setPosition(data.currentPosition))
+        w.bind(E.PLAY_PROGRESS, (data) => {
+          setPosition(data.currentPosition)
+          follow(data.soundId)
+        })
       })
       .catch(() => setStatus('error'))
     return () => {
@@ -122,12 +147,15 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   }, [started])
 
   const toggle = useCallback(() => {
-    if (widget.current) widget.current.toggle()
-    else setStarted(true)
+    if (ready.current) widget.current?.toggle()
+    else {
+      pending.current = 'play'
+      setStarted(true)
+    }
   }, [])
 
   const next = useCallback(() => {
-    if (widget.current) widget.current.next()
+    if (ready.current) widget.current?.next()
     else {
       pending.current = 'next'
       setStarted(true)
@@ -135,7 +163,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const prev = useCallback(() => {
-    if (widget.current) widget.current.prev()
+    if (ready.current) widget.current?.prev()
     else {
       pending.current = 'prev'
       setStarted(true)
@@ -155,7 +183,8 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const src =
     'https://w.soundcloud.com/player/?url=' +
     encodeURIComponent(source) +
-    '&auto_play=true&show_artwork=false&show_comments=false&show_user=false&show_teaser=false&visual=false'
+    `&start_track=${Math.max(0, site.music.comecarNaFaixa - 1)}` +
+    '&auto_play=false&show_artwork=false&show_comments=false&show_user=false&show_teaser=false&visual=false'
 
   return (
     <MusicContext.Provider value={value}>
@@ -212,9 +241,9 @@ function Title() {
   return (
     <span className="np-text">
       <a className="np-title" href={m.link} target="_blank" rel="noreferrer" title={t('music.open')}>
-        {m.status === 'error' ? t('music.error') : m.title}
+        {m.status === 'error' ? t('music.error') : m.title || t('music.group')}
       </a>
-      <span className="np-artist">{m.status === 'loading' ? t('music.loading') : m.artist}</span>
+      <span className="np-artist">{m.artist || (m.status === 'loading' ? t('music.loading') : 'SoundCloud')}</span>
     </span>
   )
 }
