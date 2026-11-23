@@ -16,8 +16,8 @@ import { Window } from './os/Window'
 import { APP_IDS, initialWinState, topWindow, winReducer, type AppId } from './os/windows'
 
 const APPS: Record<AppId, { label: string; title: string; w: number; h: number }> = {
-  sobre: { label: 'Sobre mim', title: 'Sobre mim', w: 760, h: 620 },
-  projetos: { label: 'Projetos', title: 'Projetos', w: 860, h: 560 },
+  sobre: { label: 'Sobre mim', title: 'Sobre mim', w: 800, h: 660 },
+  projetos: { label: 'Projetos', title: 'Projetos', w: 920, h: 620 },
   terminal: { label: 'Terminal', title: 'Terminal', w: 640, h: 420 },
   contato: { label: 'Contato', title: 'Contato', w: 520, h: 420 },
 }
@@ -152,7 +152,7 @@ export default function App() {
   }, [locked, top, closeApp])
 
   const content: Record<AppId, ReactNode> = {
-    sobre: <Sobre />,
+    sobre: <Sobre openApp={openApp} />,
     projetos: <Projetos request={projectRequest} />,
     terminal: <Terminal openApp={openApp} openProject={openProject} />,
     contato: <Contato />,

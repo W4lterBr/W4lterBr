@@ -7,8 +7,14 @@ export type Project = {
   kind: string
   summary: string
   listTitle: string
+  /** Como contar os itens na etiqueta do cabeçalho, ex.: "7 recursos". */
+  unidade: string
   items: string[]
   stack: string[]
+  /** Duas cores do degradê do projeto (ícone e cabeçalho). O texto sobre elas é branco: use tons médios ou escuros. */
+  cor: [string, string]
+  /** Desenho do ícone. Os disponíveis estão em src/apps/Projetos.tsx. */
+  icone: 'saude' | 'grafico' | 'caminhao' | 'codigo' | 'brilho'
   /** URL pública do sistema ou de uma demonstração. Vazio = não aparece. */
   link?: string
   /** URL do repositório, se for público. Vazio = aparece "Código privado". */
@@ -93,51 +99,66 @@ export const profile = {
 export const projects: Project[] = [
   {
     id: 'planmed',
+    cor: ['#0fa394', '#0a5f73'],
+    icone: 'saude',
     file: 'PlanMed.xml',
     title: 'PlanMed',
     kind: 'Gestão de clínicas',
     summary: 'Sistema completo para gestão de clínicas, com aplicativo mobile e inteligência artificial integrada.',
     listTitle: 'Principais recursos',
+    unidade: 'recursos',
     items: ['Agenda médica', 'Pacientes', 'Especialidades', 'Financeiro', 'Dashboard', 'Inteligência artificial', 'Aplicativo mobile'],
     stack: ['React', 'TypeScript', 'React Native'], // confirmar
   },
   {
     id: 'dwm-erp',
+    cor: ['#8a61e8', '#4a28a6'],
+    icone: 'grafico',
     file: 'DWM-ERP.xml',
     title: 'DWM ERP',
     kind: 'ERP',
     summary: 'Sistema ERP desenvolvido para gestão empresarial, com dashboard executivo e IA integrada.',
     listTitle: 'Módulos',
+    unidade: 'módulos',
     items: ['Financeiro', 'Compras', 'Vendas', 'Estoque', 'Cadastros', 'Relatórios', 'Dashboard executivo', 'IA integrada'],
     stack: ['Python'], // confirmar
   },
   {
     id: 'emissor-cte',
+    cor: ['#dd6b10', '#a83808'],
+    icone: 'caminhao',
     file: 'Emissor-CTe.xml',
     title: 'Emissor CT-e',
     kind: 'Documentos fiscais',
     summary: 'Sistema profissional para emissão de documentos fiscais eletrônicos, da geração do XML à autorização na SEFAZ.',
     listTitle: 'Recursos',
+    unidade: 'recursos',
     items: ['Emissão de CT-e', 'Geração de XML', 'Impressão do DACTE', 'Certificado digital A1', 'Comunicação com a SEFAZ'],
     stack: ['XML', 'Certificado A1', 'Web Services SEFAZ'],
   },
   {
     id: 'captura-xml',
+    cor: ['#3d8bf0', '#1f4fc0'],
+    icone: 'codigo',
     file: 'Captura-XML.xml',
     title: 'Captura Inteligente de XML',
     kind: 'Automação fiscal',
     summary: 'Consulta automática de documentos fiscais, com integração completa aos Web Services da SEFAZ.',
     listTitle: 'Documentos consultados',
+    unidade: 'tipos de documento',
     items: ['NF-e', 'NFC-e', 'CT-e', 'NFS-e'],
     stack: ['Python', 'Web Services SEFAZ'], // confirmar
   },
   {
     id: 'ia',
+    cor: ['#e44d8e', '#9c2463'],
+    icone: 'brilho',
     file: 'IA-Aplicada.xml',
     title: 'Inteligência Artificial',
     kind: 'IA aplicada',
     summary: 'Aplicações que usam IA dentro de sistemas empresariais.',
     listTitle: 'Onde a IA entra',
+    unidade: 'aplicações',
     items: ['Assistentes inteligentes', 'Automação de processos', 'Atendimento', 'Geração de conteúdo', 'Produtividade empresarial'],
     stack: ['IA generativa', 'Engenharia de prompt'],
   },
