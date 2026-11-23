@@ -40,10 +40,13 @@ export const profile = {
     cv: '', // URL do currículo em PDF ou página
   },
 
-  // Player do topo. Cole aqui o link de uma playlist, álbum ou música do Spotify.
+  // Player de música (barra do topo e tela de bloqueio).
+  // Cole em `soundcloud` o link de uma playlist, faixa ou perfil do SoundCloud.
+  // `titulo` e `artista` aparecem só até a primeira faixa carregar.
   music: {
-    titulo: 'lofi beats',
-    spotify: 'https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn',
+    titulo: 'lofi hip hop',
+    artista: 'Chillhop Music',
+    soundcloud: 'https://soundcloud.com/chillhopdotcom/sets/lofihiphop',
   },
 
   numeros: [

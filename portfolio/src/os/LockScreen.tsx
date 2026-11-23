@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { profile } from '../data/profile'
+import { LockPlayer } from './music'
 import { useClock } from './useClock'
+import { Wallpaper } from './Wallpaper'
 
 /**
- * Tela de bloqueio. Qualquer interação abre: clique, toque, tecla, rolagem ou deslizar.
- * É um <button> de verdade, então Enter e Espaço funcionam e leitores de tela anunciam a ação.
+ * Tela de bloqueio. Qualquer interação fora do player abre: clique, toque, tecla, rolagem ou deslizar.
+ * O rodapé é um <button> de verdade, então Enter e Espaço funcionam e leitores de tela anunciam a ação.
  */
 export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
   const now = useClock()
@@ -21,7 +23,9 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
   useEffect(() => {
     ref.current?.focus()
     const onKey = (e: KeyboardEvent) => {
-      if (e.metaKey || e.ctrlKey || e.altKey || e.key === 'Tab') return
+      if (e.metaKey || e.ctrlKey || e.altKey || e.key === 'Tab' || e.key === 'Shift') return
+      // teclas dentro do player controlam a música, não desbloqueiam
+      if ((e.target as HTMLElement).closest?.('.np')) return
       unlock()
     }
     window.addEventListener('keydown', onKey)
@@ -40,26 +44,34 @@ export function LockScreen({ onUnlock }: { onUnlock: () => void }) {
   const initials = profile.name.split(' ').map((p) => p[0]).join('').slice(0, 2)
 
   return (
-    <button ref={ref} type="button" className={`lock${leaving ? ' is-leaving' : ''}`} onClick={unlock}>
-      <span className="lock-clock">
-        <span className="lock-date">{date}</span>
-        <span className="lock-time">{time}</span>
-      </span>
+    <div className={`lock${leaving ? ' is-leaving' : ''}`} onClick={unlock}>
+      <Wallpaper className="wallpaper-lock" />
 
-      <span className="lock-card">
-        <span className="avatar" aria-hidden>{initials}</span>
-        <span className="lock-card-text">
-          <span className="lock-name">{profile.name}</span>
-          <span className="lock-role">
-            {profile.role}, {profile.brand}
-          </span>
-        </span>
-      </span>
+      <div className="lock-clock">
+        <p className="lock-date">{date}</p>
+        <p className="lock-time">{time}</p>
+      </div>
 
-      <span className="lock-foot">
+      <div className="lock-cards">
+        <div className="lock-card">
+          <span className="avatar" aria-hidden>{initials}</span>
+          <div>
+            <p className="lock-name">{profile.name}</p>
+            <p className="lock-role">
+              {profile.role}, {profile.brand}
+            </p>
+          </div>
+        </div>
+        {/* cliques no player controlam a música e não desbloqueiam */}
+        <div onClick={(e) => e.stopPropagation()}>
+          <LockPlayer />
+        </div>
+      </div>
+
+      <button ref={ref} type="button" className="lock-foot" onClick={unlock}>
         <span className="lock-hint">Clique ou deslize para cima para desbloquear</span>
         <span className="lock-handle" aria-hidden />
-      </span>
-    </button>
+      </button>
+    </div>
   )
 }

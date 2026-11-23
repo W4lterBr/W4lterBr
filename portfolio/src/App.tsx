@@ -6,8 +6,11 @@ import { Terminal } from './apps/Terminal'
 import { profile } from './data/profile'
 import { AppIcon, GitHubIcon, Logo } from './os/icons'
 import { LockScreen } from './os/LockScreen'
-import { MusicPlayer } from './os/MusicPlayer'
+import { BarPlayer, MusicProvider } from './os/music'
+import { playSound } from './os/sounds'
+import { Battery, SoundToggle, Wifi } from './os/StatusIcons'
 import { useClock } from './os/useClock'
+import { Wallpaper } from './os/Wallpaper'
 import { Widgets } from './os/Widgets'
 import { Window } from './os/Window'
 import { APP_IDS, initialWinState, topWindow, winReducer, type AppId } from './os/windows'
@@ -27,13 +30,27 @@ function appFromHash(): AppId | undefined {
   return APP_IDS.find((a) => a === id)
 }
 
+type Toast = { id: number; title: string; text: string }
+
 export default function App() {
   const [state, dispatch] = useReducer(winReducer, initialWinState)
   const [locked, setLocked] = useState(() => !appFromHash())
-  const [welcome, setWelcome] = useState(false)
+  const [toast, setToast] = useState<Toast | null>(null)
   const [projectRequest, setProjectRequest] = useState<{ id: string; n: number }>()
   const now = useClock()
   const top = topWindow(state)
+
+  /** Mostra um aviso no canto, com som. Some sozinho depois de alguns segundos. */
+  const notify = useCallback((title: string, text: string) => {
+    setToast({ id: Date.now(), title, text })
+    playSound('notify')
+  }, [])
+
+  useEffect(() => {
+    if (!toast) return
+    const id = window.setTimeout(() => setToast(null), 8000)
+    return () => window.clearTimeout(id)
+  }, [toast])
 
   const openApp = useCallback((id: AppId) => {
     const app = APPS[id]
@@ -41,6 +58,7 @@ export default function App() {
     const x = Math.max(16, Math.round((window.innerWidth - app.w) / 2) + step - 40)
     const y = Math.max(44, Math.round((window.innerHeight - app.h) / 2) + step - 60)
     dispatch({ type: 'open', id, x, y })
+    playSound('open')
   }, [])
 
   const openProject = useCallback(
@@ -53,8 +71,14 @@ export default function App() {
 
   const closeApp = useCallback((id: AppId) => {
     dispatch({ type: 'close', id })
+    playSound('close')
     // devolve o foco ao botão do dock, para quem navega pelo teclado
     document.querySelector<HTMLElement>(`[data-dock="${id}"]`)?.focus()
+  }, [])
+
+  const unlock = useCallback(() => {
+    playSound('unlock')
+    setLocked(false)
   }, [])
 
   // Ao desbloquear: abre a janela pedida no endereço, ou mostra o aviso de boas-vindas.
@@ -65,15 +89,17 @@ export default function App() {
       openApp(wanted)
       return
     }
-    setWelcome(true)
-    const id = window.setTimeout(() => setWelcome(false), 8000)
+    const id = window.setTimeout(
+      () => notify('Bem-vindo ao meu portfólio', 'Os aplicativos ficam no dock aqui embaixo. Fique à vontade para explorar.'),
+      650,
+    )
     return () => window.clearTimeout(id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locked])
 
   // No celular a janela ocupa a tela toda: o aviso sai para não cobrir os botões dela.
   useEffect(() => {
-    if (top && isMobile()) setWelcome(false)
+    if (top && isMobile()) setToast(null)
   }, [top])
 
   // Voltar/avançar do navegador ou um link #janela com o site já aberto.
@@ -116,8 +142,8 @@ export default function App() {
   const date = now.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' }).replace(',', '')
 
   return (
-    <>
-      <div className="wallpaper" aria-hidden />
+    <MusicProvider>
+      <Wallpaper />
 
       <div className="os" inert={locked}>
         <header className="bar">
@@ -133,25 +159,12 @@ export default function App() {
             </nav>
           </div>
 
-          <MusicPlayer />
+          <BarPlayer />
 
           <div className="bar-right">
-            <span className="bar-status" aria-hidden>
-              <svg className="bar-battery" viewBox="0 0 28 13">
-                <rect x="0.5" y="0.5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity="0.45" />
-                <rect x="2" y="2" width="20" height="9" rx="2" fill="currentColor" />
-                <path d="M25 4.5v4c.9-.3 1.5-1.1 1.5-2s-.6-1.700-1.500-2z" fill="currentColor" opacity="0.5" />
-              </svg>
-              <svg className="bar-wifi" viewBox="0 0 18 13">
-                <path d="M1 4.3a11.5 11.5 0 0 1 16 0M3.7 7a7.7 7.7 0 0 1 10.6 0M6.4 9.7a3.8 3.8 0 0 1 5.2 0" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-                <circle cx="9" cy="11.7" r="1.2" fill="currentColor" />
-              </svg>
-              <svg className="bar-control" viewBox="0 0 16 14">
-                <rect x="0.75" y="0.75" width="14.5" height="5" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                <circle cx="11.8" cy="3.25" r="1.4" fill="currentColor" />
-                <rect x="0.75" y="8.25" width="14.5" height="5" rx="2.5" fill="currentColor" />
-              </svg>
-            </span>
+            <Battery notify={notify} />
+            <Wifi notify={notify} />
+            <SoundToggle />
             <time className="bar-clock" dateTime={now.toISOString()}>
               <span className="bar-date">{date}</span>
               <span>{time}</span>
@@ -162,16 +175,16 @@ export default function App() {
         <main className="desk">
           <Widgets openApp={openApp} />
 
-          {welcome && (
-            <div className="toast" role="status">
+          {toast && (
+            <div className="toast" role="status" key={toast.id}>
               <span className="toast-icon" aria-hidden>
                 <AppIcon id="contato" />
               </span>
               <div className="toast-text">
-                <strong>Bem-vindo ao meu portfólio</strong>
-                <span>Os aplicativos ficam no dock aqui embaixo. Fique à vontade para explorar.</span>
+                <strong>{toast.title}</strong>
+                <span>{toast.text}</span>
               </div>
-              <button type="button" className="toast-close" aria-label="Fechar aviso" onClick={() => setWelcome(false)}>
+              <button type="button" className="toast-close" aria-label="Fechar aviso" onClick={() => setToast(null)}>
                 <svg viewBox="0 0 10 10" aria-hidden><path d="M2 2l6 6M8 2L2 8" /></svg>
               </button>
             </div>
@@ -224,7 +237,7 @@ export default function App() {
         </nav>
       </div>
 
-      {locked && <LockScreen onUnlock={() => setLocked(false)} />}
-    </>
+      {locked && <LockScreen onUnlock={unlock} />}
+    </MusicProvider>
   )
 }
