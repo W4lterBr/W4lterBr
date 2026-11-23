@@ -15,7 +15,7 @@ npm run preview  # serve dist/ localmente
 
 Todo o conteúdo está em `src/data/profile.ts`, em português e em inglês: bio, números, competências, trajetória, contato e projetos.
 
-- **Contato:** preencha `contact.email`, `linkedin`, `whatsapp` e `cv`. Campo vazio não aparece no site.
+- **Contato:** `contact.email`, `whatsapp`, `instagram`, `linkedin`, `github` e `cv`. Campo vazio não aparece no site.
 - **Projetos:** cada item aceita `link` (sistema no ar), `repo` (código público) e `images`. O desenho do ícone
   (`icone`) de cada projeto também fica ali.
   Coloque os prints em `public/projetos/<id>/` em WebP, com no máximo 1600 px de largura.

@@ -12,10 +12,11 @@ export const site = {
 
   // Contato. Campo vazio não aparece no site.
   contact: {
-    github: 'https://github.com/W4lterBr',
-    email: '',
+    email: 'waltermanoel17@gmail.com',
+    whatsapp: '', // só dígitos, com DDI e DDD, ex.: 5567999990000
+    instagram: 'https://www.instagram.com/walter_manoel_/',
     linkedin: '',
-    whatsapp: '', // só dígitos com DDI, ex.: 5567999990000
+    github: 'https://github.com/W4lterBr',
     cv: '', // URL do currículo em PDF ou página
   },
 

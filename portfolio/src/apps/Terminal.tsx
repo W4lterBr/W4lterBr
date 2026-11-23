@@ -67,8 +67,10 @@ export function Terminal({ openApp, openProject }: Props) {
         const c = profile.contact
         const rows = [
           c.email && `${t('contact.email').padEnd(9)} ${c.email}`,
-          c.github && `GitHub    ${c.github.replace('https://', '')}`,
+          c.whatsapp && `WhatsApp  +${c.whatsapp}`,
+          c.instagram && `Instagram ${c.instagram.replace('https://www.', '')}`,
           c.linkedin && `LinkedIn  ${c.linkedin.replace('https://', '')}`,
+          c.github && `GitHub    ${c.github.replace('https://', '')}`,
         ].filter(Boolean) as string[]
         return rows.map(out)
       }
