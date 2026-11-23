@@ -21,7 +21,7 @@ const APPS: Record<AppId, { w: number; h: number }> = {
   sobre: { w: 800, h: 660 },
   projetos: { w: 920, h: 620 },
   terminal: { w: 640, h: 420 },
-  contato: { w: 520, h: 420 },
+  contato: { w: 560, h: 500 },
 }
 
 const isMobile = () => window.matchMedia('(max-width: 720px)').matches
