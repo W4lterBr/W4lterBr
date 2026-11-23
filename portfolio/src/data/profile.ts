@@ -13,7 +13,7 @@ export const site = {
   // Contato. Campo vazio não aparece no site.
   contact: {
     email: 'waltermanoel17@gmail.com',
-    whatsapp: '5567992509407', // só dígitos, com DDI e DDD
+    whatsapp: '', // só dígitos, com DDI e DDD, ex.: 5567999990000
     instagram: 'https://www.instagram.com/walter_manoel_/',
     linkedin: '',
     github: 'https://github.com/W4lterBr',

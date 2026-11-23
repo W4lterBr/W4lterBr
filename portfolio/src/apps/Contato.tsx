@@ -3,7 +3,7 @@ import { useI18n } from '../i18n'
 
 type Channel = { id: string; label: string; text: string; href: string; action: string }
 
-/** 5567992509407 -> +55 67 99250-9407 */
+/** 5567999990000 -> +55 67 99999-0000 */
 function formatPhone(digits: string): string {
   const m = digits.match(/^(\d{2})(\d{2})(\d{4,5})(\d{4})$/)
   return m ? `+${m[1]} ${m[2]} ${m[3]}-${m[4]}` : `+${digits}`
