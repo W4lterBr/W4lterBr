@@ -217,6 +217,15 @@ button {
 }
 
 /* ---------- estrutura ---------- */
+.bar,
+.dock,
+.widgets,
+.toast,
+.lock {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 .os {
   position: fixed;
   inset: 0;
@@ -244,8 +253,10 @@ button {
   min-width: 0;
 }
 .bar-brand {
+  overflow: hidden;
   font-weight: 700;
   white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .bar-menu {
   display: flex;
@@ -365,6 +376,99 @@ button {
   width: 16px;
   height: 12px;
 }
+
+/* painéis que descem da barra (volume): abrem e fecham com um movimento curto */
+.pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(24px) saturate(1.6);
+  box-shadow: 0 24px 50px -20px rgba(40, 20, 90, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+  transform: translateY(-8px) scale(0.96);
+  transform-origin: top right;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1.1), visibility 0.18s;
+}
+.pop.is-open {
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+}
+.vol {
+  position: relative;
+}
+.vol-pop {
+  width: 236px;
+  padding: 12px 14px 14px;
+}
+.vol-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.vol-head span:last-child {
+  color: var(--label-2);
+  font-variant-numeric: tabular-nums;
+}
+.vol-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.vol-mute {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(60, 60, 67, 0.1);
+  cursor: pointer;
+}
+.vol-mute:hover {
+  background: rgba(60, 60, 67, 0.2);
+}
+.vol-mute svg {
+  width: 16px;
+  height: 12px;
+}
+.vol-row input[type='range'] {
+  flex: 1;
+  min-width: 0;
+  height: 22px;
+  margin: 0;
+  border-radius: 11px;
+  /* trilho preenchido até o valor atual, como o controle de som do macOS */
+  background: linear-gradient(to right, var(--accent) var(--v), rgba(60, 60, 67, 0.16) var(--v));
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+.vol-row input[type='range']::-webkit-slider-thumb {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.vol-row input[type='range']::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
 .bar-clock {
   display: flex;
   gap: 0.45rem;
@@ -427,8 +531,7 @@ button {
   display: flex;
   align-items: center;
 }
-.np-controls button,
-.np-mute {
+.np-controls button {
   display: grid;
   place-items: center;
   border: 0;
@@ -436,12 +539,10 @@ button {
   background: none;
   cursor: pointer;
 }
-.np-controls button:hover,
-.np-mute:hover {
+.np-controls button:hover {
   background: rgba(60, 60, 67, 0.14);
 }
-.np-controls svg,
-.np-mute svg {
+.np-controls svg {
   fill: currentColor;
 }
 
@@ -470,17 +571,12 @@ button {
 .np-bar .np-artist {
   font-size: 0.66rem;
 }
-.np-bar .np-controls button,
-.np-bar .np-mute {
+.np-bar .np-controls button {
   width: 24px;
   height: 24px;
 }
 .np-bar .np-controls svg {
   width: 12px;
-  height: 11px;
-}
-.np-bar .np-mute svg {
-  width: 15px;
   height: 11px;
 }
 .np-bar .np-play {
@@ -874,6 +970,49 @@ button {
   border-radius: 14px;
   box-shadow: 0 24px 50px -24px rgba(40, 20, 90, 0.4), 0 0 0 1px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+}
+/* abrir, fechar, minimizar e maximizar com movimento curto, em vez de aparecer de uma vez */
+.win {
+  transform-origin: 50% 60%;
+  animation: win-in 0.26s cubic-bezier(0.2, 0.9, 0.3, 1.08) backwards;
+}
+.win:not([data-dragging]) {
+  transition: left 0.24s cubic-bezier(0.3, 0.8, 0.3, 1), top 0.24s cubic-bezier(0.3, 0.8, 0.3, 1),
+    width 0.24s cubic-bezier(0.3, 0.8, 0.3, 1), height 0.24s cubic-bezier(0.3, 0.8, 0.3, 1), border-radius 0.24s,
+    box-shadow 0.2s;
+}
+.win.is-leaving-close {
+  animation: win-out 0.17s ease-in forwards;
+  pointer-events: none;
+}
+.win.is-leaving-min {
+  transform-origin: 50% 100%;
+  animation: win-min 0.24s cubic-bezier(0.5, 0, 0.8, 0.4) forwards;
+  pointer-events: none;
+}
+@keyframes win-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.94);
+  }
+}
+@keyframes win-out {
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+@keyframes win-min {
+  to {
+    opacity: 0;
+    transform: translateY(45vh) scale(0.25);
+  }
+}
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(7%);
+  }
 }
 .win.is-active {
   box-shadow: 0 36px 80px -24px rgba(40, 20, 90, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.14);
@@ -1314,7 +1453,12 @@ button {
   color: var(--deep);
   text-align: center;
   cursor: pointer;
+  /* o arrasto para cima é tratado pela página, não como rolagem */
+  touch-action: none;
   transition: transform 0.42s cubic-bezier(0.6, 0, 0.3, 1);
+}
+.lock.is-dragging {
+  transition: none;
 }
 .lock.is-leaving {
   transform: translateY(-100%);
@@ -1406,10 +1550,12 @@ button {
   .bar-date,
   .bar-menu,
   .bar-battery-pct,
-  .bar-sound,
-  .np-bar .np-text,
-  .np-bar .np-mute {
+  .np-bar .np-text {
     display: none;
+  }
+  .bar-btn,
+  .bar-wifi {
+    padding: 0 4px;
   }
   .bar {
     gap: 6px;
@@ -1458,6 +1604,9 @@ button {
     height: 100%;
     border-radius: 0;
     box-shadow: none;
+  }
+  .win {
+    animation-name: sheet-in;
   }
   .win-bar {
     height: 46px;
@@ -1579,8 +1728,15 @@ button {
     transition: none;
   }
   .blob,
-  .bar-wifi .wifi-arc {
+  .bar-wifi .wifi-arc,
+  .win,
+  .win.is-leaving-close,
+  .win.is-leaving-min {
     animation: none;
+  }
+  .win,
+  .pop {
+    transition: none;
   }
   .toast {
     animation: none;

@@ -41,6 +41,6 @@ chrome --headless=new --hide-scrollbars --window-size=1200,630 --allow-file-acce
 - **Música:** o player usa o SoundCloud. Em `src/data/profile.ts`, troque `music.soundcloud` pelo link de uma playlist,
   faixa ou perfil. Nada do SoundCloud é carregado antes do primeiro clique em tocar.
 - **Sons da interface:** são sintetizados em `src/os/sounds.ts` (não há arquivos de áudio). O ícone de alto-falante
-  da barra liga e desliga.
+  da barra abre o controle de volume, que vale para os sons e para a música.
 - **Bateria:** é de enfeite. Perde 1% a cada 15 s (`DRAIN_EVERY_MS` em `src/os/StatusIcons.tsx`) e recarrega com um clique.
 - **Wi-Fi:** mostra a conexão real do visitante (online/offline e velocidade estimada, quando o navegador informa).

@@ -1,5 +1,6 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react'
 import { profile } from '../data/profile'
+import { getVolume, subscribeVolume } from './sounds'
 
 /**
  * Música do sistema. O áudio vem do player oficial do SoundCloud, que fica invisível na página
@@ -51,11 +52,9 @@ type Music = {
   link: string
   position: number
   duration: number
-  muted: boolean
   toggle: () => void
   next: () => void
   prev: () => void
-  toggleMute: () => void
 }
 
 const MusicContext = createContext<Music | null>(null)
@@ -74,7 +73,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const [track, setTrack] = useState({ title: profile.music.titulo, artist: profile.music.artista, cover: null as string | null, link: source })
   const [position, setPosition] = useState(0)
   const [duration, setDuration] = useState(0)
-  const [muted, setMuted] = useState(false)
+  const volume = useSyncExternalStore(subscribeVolume, getVolume)
   const frame = useRef<HTMLIFrameElement>(null)
   const widget = useRef<Widget | null>(null)
   const pending = useRef<'next' | 'prev' | null>(null)
@@ -101,6 +100,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
 
         w.bind(E.READY, () => {
           setStatus('ready')
+          w.setVolume(getVolume())
           refresh()
           if (pending.current === 'next') w.next()
           if (pending.current === 'prev') w.prev()
@@ -141,16 +141,14 @@ export function MusicProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const toggleMute = useCallback(() => {
-    setMuted((m) => {
-      widget.current?.setVolume(m ? 100 : 0)
-      return !m
-    })
-  }, [])
+  // a música segue o volume do sistema (ícone de som da barra)
+  useEffect(() => {
+    widget.current?.setVolume(volume)
+  }, [volume])
 
   const value = useMemo<Music>(
-    () => ({ status, playing, ...track, position, duration, muted, toggle, next, prev, toggleMute }),
-    [status, playing, track, position, duration, muted, toggle, next, prev, toggleMute],
+    () => ({ status, playing, ...track, position, duration, toggle, next, prev }),
+    [status, playing, track, position, duration, toggle, next, prev],
   )
 
   const src =
@@ -180,19 +178,8 @@ const Note = () => (
     <circle cx="16.500" cy="15" r="2.500" fill="currentColor" />
   </svg>
 )
-const Speaker = ({ off }: { off: boolean }) => (
-  <svg viewBox="0 0 16 12" aria-hidden>
-    <path d="M1 4h2.500L7 1v10L3.500 8H1z" fill="currentColor" />
-    {off ? (
-      <path d="M10 3.500l4 5M14 3.500l-4 5" fill="none" stroke="currentColor" strokeWidth="1.500" strokeLinecap="round" />
-    ) : (
-      <path d="M9.500 3.500a3.500 3.500 0 0 1 0 5M11.500 1.500a6 6 0 0 1 0 9" fill="none" stroke="currentColor" strokeWidth="1.400" strokeLinecap="round" />
-    )}
-  </svg>
-)
-
 function Cover({ src }: { src: string | null }) {
-  return <span className="np-cover">{src ? <img src={src} alt="" /> : <Note />}</span>
+  return <span className="np-cover">{src ? <img src={src} alt="" draggable={false} /> : <Note />}</span>
 }
 
 function clock(ms: number): string {
@@ -237,9 +224,6 @@ export function BarPlayer() {
       <Cover src={m.cover} />
       <Title />
       <Controls />
-      <button type="button" className="np-mute" aria-label={m.muted ? 'Ativar som da música' : 'Silenciar música'} title={m.muted ? 'Ativar som' : 'Silenciar'} aria-pressed={m.muted} onClick={m.toggleMute}>
-        <Speaker off={m.muted} />
-      </button>
     </div>
   )
 }

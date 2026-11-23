@@ -1,36 +1,46 @@
 /**
  * Sons da interface, sintetizados na hora com a Web Audio API.
  * Não há arquivos de áudio: cada som é uma ou duas notas curtas com decaimento suave.
+ *
+ * O volume (0 a 100) é um só para o sistema: vale para estes sons e para a música.
  */
 
 export type SoundName = 'notify' | 'open' | 'close' | 'unlock' | 'charge'
 
-const KEY = 'dwm-os-sons-mudos'
+const KEY = 'dwm-os-volume'
+const DEFAULT_VOLUME = 70
 let ctx: AudioContext | null = null
-let muted = false
+let volume = DEFAULT_VOLUME
 try {
-  muted = localStorage.getItem(KEY) === '1'
+  const stored = localStorage.getItem(KEY)
+  if (stored !== null && Number.isFinite(Number(stored))) volume = clamp(Number(stored))
 } catch {
-  // armazenamento bloqueado: segue com som ligado
+  // armazenamento bloqueado: segue com o volume padrão
 }
 
 const listeners = new Set<() => void>()
 
-export function isMuted(): boolean {
-  return muted
+function clamp(v: number): number {
+  return Math.min(100, Math.max(0, Math.round(v)))
 }
 
-export function setMuted(value: boolean): void {
-  muted = value
+export function getVolume(): number {
+  return volume
+}
+
+export function setVolume(value: number): void {
+  const next = clamp(value)
+  if (next === volume) return
+  volume = next
   try {
-    localStorage.setItem(KEY, value ? '1' : '0')
+    localStorage.setItem(KEY, String(next))
   } catch {
     // sem armazenamento a escolha vale só para esta visita
   }
   listeners.forEach((fn) => fn())
 }
 
-export function subscribeMuted(fn: () => void): () => void {
+export function subscribeVolume(fn: () => void): () => void {
   listeners.add(fn)
   return () => listeners.delete(fn)
 }
@@ -57,13 +67,14 @@ const SOUNDS: Record<SoundName, Note[]> = {
 }
 
 export function playSound(name: SoundName): void {
-  if (muted) return
+  if (volume === 0) return
   // Navegadores só liberam áudio depois de uma interação; antes disso não há o que tocar.
   if (!ctx && navigator.userActivation && !navigator.userActivation.hasBeenActive) return
   try {
     ctx ??= new AudioContext()
     if (ctx.state === 'suspended') void ctx.resume()
     const now = ctx.currentTime
+    const scale = volume / DEFAULT_VOLUME
     for (const n of SOUNDS[name]) {
       const osc = ctx.createOscillator()
       const gain = ctx.createGain()
@@ -72,7 +83,7 @@ export function playSound(name: SoundName): void {
       osc.frequency.setValueAtTime(n.freq, t0)
       if (n.to) osc.frequency.exponentialRampToValueAtTime(n.to, t0 + n.dur)
       gain.gain.setValueAtTime(0.0001, t0)
-      gain.gain.exponentialRampToValueAtTime(n.gain, t0 + 0.012)
+      gain.gain.exponentialRampToValueAtTime(Math.max(0.0002, n.gain * scale), t0 + 0.012)
       gain.gain.exponentialRampToValueAtTime(0.0001, t0 + n.dur)
       osc.connect(gain).connect(ctx.destination)
       osc.start(t0)

@@ -7,13 +7,15 @@ type Props = {
   width: number
   height: number
   active: boolean
+  /** animação de saída em andamento */
+  leaving?: 'close' | 'min'
   dispatch: Dispatch<WinAction>
   children: ReactNode
 }
 
 const MOBILE = '(max-width: 720px)'
 
-export function Window({ win, title, width, height, active, dispatch, children }: Props) {
+export function Window({ win, title, width, height, active, leaving, dispatch, children }: Props) {
   const ref = useRef<HTMLElement>(null)
   const drag = useRef<{ dx: number; dy: number } | null>(null)
 
@@ -30,6 +32,8 @@ export function Window({ win, title, width, height, active, dispatch, children }
     if (win.maximized || window.matchMedia(MOBILE).matches) return
     drag.current = { dx: e.clientX - win.x, dy: e.clientY - win.y }
     e.currentTarget.setPointerCapture(e.pointerId)
+    // durante o arrasto a janela segue o mouse sem a transição de posição
+    if (ref.current) ref.current.dataset.dragging = ''
   }
 
   const onPointerMove = (e: PointerEvent<HTMLElement>) => {
@@ -43,6 +47,7 @@ export function Window({ win, title, width, height, active, dispatch, children }
 
   const endDrag = () => {
     drag.current = null
+    if (ref.current) delete ref.current.dataset.dragging
   }
 
   const style = {
@@ -56,7 +61,7 @@ export function Window({ win, title, width, height, active, dispatch, children }
   return (
     <section
       ref={ref}
-      className={`win${active ? ' is-active' : ''}${win.maximized ? ' is-max' : ''}`}
+      className={`win${active ? ' is-active' : ''}${win.maximized ? ' is-max' : ''}${leaving ? ` is-leaving-${leaving}` : ''}`}
       style={style}
       hidden={win.minimized}
       role="dialog"

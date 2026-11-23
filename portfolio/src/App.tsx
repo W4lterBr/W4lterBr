@@ -8,7 +8,7 @@ import { AppIcon, GitHubIcon, Logo } from './os/icons'
 import { LockScreen } from './os/LockScreen'
 import { BarPlayer, MusicProvider } from './os/music'
 import { playSound } from './os/sounds'
-import { Battery, SoundToggle, Wifi } from './os/StatusIcons'
+import { Battery, VolumeControl, Wifi } from './os/StatusIcons'
 import { useClock } from './os/useClock'
 import { Wallpaper } from './os/Wallpaper'
 import { Widgets } from './os/Widgets'
@@ -37,6 +37,8 @@ export default function App() {
   const [locked, setLocked] = useState(() => !appFromHash())
   const [toast, setToast] = useState<Toast | null>(null)
   const [projectRequest, setProjectRequest] = useState<{ id: string; n: number }>()
+  // janelas que estão saindo de cena (animação de fechar ou minimizar em andamento)
+  const [leaving, setLeaving] = useState<Partial<Record<AppId, 'close' | 'min'>>>({})
   const now = useClock()
   const top = topWindow(state)
 
@@ -57,6 +59,7 @@ export default function App() {
     const step = APP_IDS.indexOf(id) * 28
     const x = Math.max(16, Math.round((window.innerWidth - app.w) / 2) + step - 40)
     const y = Math.max(44, Math.round((window.innerHeight - app.h) / 2) + step - 60)
+    setLeaving((l) => ({ ...l, [id]: undefined }))
     dispatch({ type: 'open', id, x, y })
     playSound('open')
   }, [])
@@ -69,12 +72,30 @@ export default function App() {
     [openApp],
   )
 
-  const closeApp = useCallback((id: AppId) => {
-    dispatch({ type: 'close', id })
-    playSound('close')
-    // devolve o foco ao botão do dock, para quem navega pelo teclado
-    document.querySelector<HTMLElement>(`[data-dock="${id}"]`)?.focus()
+  /** Tira a janela de cena com animação e só então aplica a ação. */
+  const leave = useCallback((id: AppId, how: 'close' | 'min') => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    setLeaving((l) => ({ ...l, [id]: how }))
+    window.setTimeout(
+      () => {
+        dispatch({ type: how === 'close' ? 'close' : 'minimize', id })
+        setLeaving((l) => ({ ...l, [id]: undefined }))
+        // devolve o foco ao botão do dock, para quem navega pelo teclado
+        document.querySelector<HTMLElement>(`[data-dock="${id}"]`)?.focus()
+      },
+      reduce ? 0 : how === 'close' ? 170 : 240,
+    )
   }, [])
+
+  const closeApp = useCallback(
+    (id: AppId) => {
+      playSound('close')
+      leave(id, 'close')
+    },
+    [leave],
+  )
+
+  const minimizeApp = useCallback((id: AppId) => leave(id, 'min'), [leave])
 
   const unlock = useCallback(() => {
     playSound('unlock')
@@ -164,7 +185,7 @@ export default function App() {
           <div className="bar-right">
             <Battery notify={notify} />
             <Wifi notify={notify} />
-            <SoundToggle />
+            <VolumeControl />
             <time className="bar-clock" dateTime={now.toISOString()}>
               <span className="bar-date">{date}</span>
               <span>{time}</span>
@@ -198,7 +219,10 @@ export default function App() {
               width={APPS[win.id].w}
               height={APPS[win.id].h}
               active={top?.id === win.id}
-              dispatch={(action) => (action.type === 'close' ? closeApp(action.id) : dispatch(action))}
+              leaving={leaving[win.id]}
+              dispatch={(action) =>
+                action.type === 'close' ? closeApp(action.id) : action.type === 'minimize' ? minimizeApp(action.id) : dispatch(action)
+              }
             >
               {content[win.id]}
             </Window>
@@ -217,7 +241,7 @@ export default function App() {
                   data-dock={id}
                   data-open={win ? '' : undefined}
                   aria-pressed={top?.id === id}
-                  onClick={() => (top?.id === id ? dispatch({ type: 'minimize', id }) : openApp(id))}
+                  onClick={() => (top?.id === id ? minimizeApp(id) : openApp(id))}
                 >
                   <span className={`dock-tile tile-${id}`}>
                     <AppIcon id={id} />
