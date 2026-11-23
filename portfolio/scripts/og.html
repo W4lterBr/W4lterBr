@@ -1,0 +1,43 @@
+<!doctype html>
+<!-- Fonte da imagem de prévia (public/og.png). Gere de novo com o comando descrito no README. -->
+<html lang="pt-BR">
+<meta charset="utf-8">
+<style>
+  @font-face { font-family: Inter; font-weight: 100 900; src: url(../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2); }
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    font-family: Inter, 'Segoe UI', sans-serif; color: #1c1c1e;
+    background: radial-gradient(60% 50% at 12% 18%, #fbdcf1 0, transparent 62%), radial-gradient(55% 55% at 88% 12%, #cfe0ff 0, transparent 62%), radial-gradient(70% 60% at 62% 100%, #d3bff8 0, transparent 66%), linear-gradient(#f5f0fd, #e7dcf9);
+    display: grid; place-items: center;
+  }
+  .card { width: 940px; padding: 54px 60px; border-radius: 56px; background: rgba(255,255,255,.78); box-shadow: 0 40px 80px -40px rgba(76,40,130,.5), inset 0 0 0 2px rgba(255,255,255,.8); display: grid; gap: 34px; }
+  .top { display: flex; align-items: center; gap: 34px; }
+  .avatar { width: 150px; height: 150px; border-radius: 50%; display: grid; place-items: center; flex: none; background: linear-gradient(140deg, #a77bf3, #6a3fd0 60%, #4b2aa8); color: #fff; font-weight: 700; font-size: 60px; }
+  h1 { margin: 0; font-size: 84px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; }
+  .role { margin-top: 8px; font-size: 34px; color: #5c5c66; }
+  .line { font-size: 32px; line-height: 1.35; }
+  .foot { display: flex; justify-content: space-between; align-items: center; }
+  .tiles { display: flex; gap: 16px; }
+  .tiles i { width: 64px; height: 64px; border-radius: 18px; }
+  .url { font-size: 28px; font-weight: 600; color: #5a32bd; }
+</style>
+<div class="card">
+  <div class="top">
+    <div class="avatar">WM</div>
+    <div>
+      <h1>Walter Manoel</h1>
+      <div class="role">Desenvolvedor Full Stack, DWM Systems</div>
+    </div>
+  </div>
+  <div class="line">Sistemas empresariais, automação fiscal e IA aplicada.</div>
+  <div class="foot">
+    <div class="tiles">
+      <i style="background:linear-gradient(160deg,#a983f5,#6a3fd0)"></i>
+      <i style="background:linear-gradient(160deg,#6fb6ff,#2f6fe0)"></i>
+      <i style="background:linear-gradient(160deg,#3d3a4d,#17151f)"></i>
+      <i style="background:linear-gradient(160deg,#ff9ac6,#e0457e)"></i>
+    </div>
+    <div class="url">w4lterbr.github.io/W4lterBr</div>
+  </div>
+</div>
+</html>
