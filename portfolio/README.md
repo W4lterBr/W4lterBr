@@ -35,3 +35,12 @@ Se o endereço do site mudar (outro nome na Netlify ou domínio próprio), atual
 chrome --headless=new --hide-scrollbars --window-size=1200,630 --allow-file-access-from-files \
   --screenshot=public/og.png scripts/og.html
 ```
+
+## Música, sons e barra do topo
+
+- **Música:** o player usa o SoundCloud. Em `src/data/profile.ts`, troque `music.soundcloud` pelo link de uma playlist,
+  faixa ou perfil. Nada do SoundCloud é carregado antes do primeiro clique em tocar.
+- **Sons da interface:** são sintetizados em `src/os/sounds.ts` (não há arquivos de áudio). O ícone de alto-falante
+  da barra liga e desliga.
+- **Bateria:** é de enfeite. Perde 1% a cada 15 s (`DRAIN_EVERY_MS` em `src/os/StatusIcons.tsx`) e recarrega com um clique.
+- **Wi-Fi:** mostra a conexão real do visitante (online/offline e velocidade estimada, quando o navegador informa).

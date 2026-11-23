@@ -40,6 +40,15 @@ export const profile = {
     cv: '', // URL do currículo em PDF ou página
   },
 
+  // Player de música (barra do topo e tela de bloqueio).
+  // Cole em `soundcloud` o link de uma playlist, faixa ou perfil do SoundCloud.
+  // `titulo` e `artista` aparecem só até a primeira faixa carregar.
+  music: {
+    titulo: 'lofi hip hop',
+    artista: 'Chillhop Music',
+    soundcloud: 'https://soundcloud.com/chillhopdotcom/sets/lofihiphop',
+  },
+
   numeros: [
     { valor: '+8 anos', rotulo: 'Experiência profissional' },
     { valor: '+4 anos', rotulo: 'Rotinas contábeis e fiscais' },

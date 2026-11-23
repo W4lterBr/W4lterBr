@@ -20,11 +20,8 @@
   --ui: -apple-system, BlinkMacSystemFont, 'Inter Variable', 'Segoe UI', system-ui, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Consolas, monospace;
 
-  --bar-h: 32px;
+  --bar-h: 34px;
   --dock-h: 104px;
-  --wall: radial-gradient(60% 50% at 12% 18%, #fbdcf1 0, transparent 62%),
-    radial-gradient(55% 55% at 88% 12%, #cfe0ff 0, transparent 62%),
-    radial-gradient(70% 60% at 62% 100%, #d3bff8 0, transparent 66%), linear-gradient(#f5f0fd, #e7dcf9);
   color-scheme: light;
 }
 
@@ -95,7 +92,70 @@ button {
 .wallpaper {
   position: fixed;
   inset: 0;
-  background: var(--wall);
+  display: block;
+  overflow: hidden;
+  background: linear-gradient(#f5f0fd, #e7dcf9);
+}
+.wallpaper-lock {
+  position: absolute;
+  z-index: -1;
+}
+.blob {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  filter: blur(70px);
+  will-change: transform;
+  animation: drift 30s ease-in-out infinite alternate;
+}
+.blob-rosa {
+  left: -12vmax;
+  top: -10vmax;
+  width: 52vmax;
+  height: 46vmax;
+  background: #fbd3ee;
+  --dx: 10vw;
+  --dy: 9vh;
+  --s: 1.18;
+  animation-duration: 26s;
+}
+.blob-azul {
+  right: -14vmax;
+  top: -14vmax;
+  width: 50vmax;
+  height: 48vmax;
+  background: #c6dbff;
+  --dx: -9vw;
+  --dy: 12vh;
+  --s: 1.12;
+  animation-duration: 34s;
+}
+.blob-violeta {
+  left: 28vw;
+  bottom: -26vmax;
+  width: 62vmax;
+  height: 50vmax;
+  background: #cdb6f8;
+  --dx: -12vw;
+  --dy: -10vh;
+  --s: 1.2;
+  animation-duration: 40s;
+}
+.blob-lilas {
+  left: -6vw;
+  bottom: -8vmax;
+  width: 34vmax;
+  height: 30vmax;
+  background: #e9d2ff;
+  --dx: 16vw;
+  --dy: -8vh;
+  --s: 0.9;
+  animation-duration: 46s;
+}
+@keyframes drift {
+  to {
+    transform: translate(var(--dx), var(--dy)) scale(var(--s));
+  }
 }
 
 /* ---------- peças compartilhadas ---------- */
@@ -165,10 +225,12 @@ button {
 }
 
 .bar {
-  display: flex;
+  position: relative;
+  z-index: 9500;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  gap: 12px;
   padding: 0 14px;
   background: rgba(255, 255, 255, 0.45);
   backdrop-filter: blur(20px) saturate(1.6);
@@ -178,24 +240,317 @@ button {
 .bar-left {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.75rem;
   min-width: 0;
 }
 .bar-brand {
   font-weight: 700;
-}
-.bar-app {
-  padding-left: 0.4rem;
-  color: var(--label-2);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+.bar-menu {
+  display: flex;
+  gap: 2px;
+  min-width: 0;
+}
+.bar-menu button {
+  padding: 3px 9px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.bar-menu button:hover,
+.bar-btn:hover {
+  background: rgba(60, 60, 67, 0.12);
+}
+.bar-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.bar-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  cursor: pointer;
+}
+.bar-battery svg {
+  width: 26px;
+  height: 12px;
+}
+.bar-battery-pct {
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+.bar-battery-fill {
+  fill: currentColor;
+  transition: width 0.4s linear;
+}
+.bar-battery.is-low .bar-battery-fill {
+  fill: #e5484d;
+}
+.bar-battery.is-charging .bar-battery-fill {
+  fill: #2fb65a;
+}
+.bar-battery-bolt {
+  fill: #fff;
+  stroke: rgba(0, 0, 0, 0.35);
+  stroke-width: 0.5;
+}
+.bar-wifi {
+  display: grid;
+  place-items: center;
+  height: 24px;
+  padding: 0 6px;
+}
+.bar-wifi svg {
+  width: 17px;
+  height: 13px;
+}
+.wifi-arc {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  opacity: 0.25;
+}
+.wifi-dot {
+  fill: currentColor;
+}
+/* acende só os arcos que o sinal alcança */
+.bar-wifi[data-bars='1'] .wifi-1,
+.bar-wifi[data-bars='2'] .wifi-1,
+.bar-wifi[data-bars='2'] .wifi-2,
+.bar-wifi[data-bars='3'] .wifi-arc {
+  opacity: 1;
+}
+/* a cada 9 s as ondas saem do ponto, uma depois da outra, como se o sinal fosse medido de novo */
+.bar-wifi:not(.is-off) .wifi-arc {
+  animation: wifi-pulse 9s ease-in-out infinite;
+}
+.bar-wifi .wifi-2 {
+  animation-delay: 0.18s;
+}
+.bar-wifi .wifi-3 {
+  animation-delay: 0.36s;
+}
+@keyframes wifi-pulse {
+  0%,
+  12%,
+  100% {
+    stroke-opacity: 1;
+  }
+  3% {
+    stroke-opacity: 0.15;
+  }
+}
+.bar-wifi.is-off .wifi-dot {
+  opacity: 0.35;
+}
+.wifi-slash {
+  fill: none;
+  stroke: #e5484d;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+.bar-sound svg {
+  width: 16px;
+  height: 12px;
 }
 .bar-clock {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.45rem;
+  padding-left: 6px;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+/* ---------- player de música ---------- */
+.music-frame {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 1px;
+  height: 1px;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.np-cover {
+  display: grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+  background: linear-gradient(140deg, #a77bf3, #6a3fd0);
+  color: #fff;
+}
+.np-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.np-cover svg {
+  width: 58%;
+  height: 58%;
+}
+.np-text {
+  display: grid;
+  min-width: 0;
+  line-height: 1.15;
+}
+.np-title {
+  overflow: hidden;
+  color: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-decoration: none;
+}
+.np-title:hover {
+  text-decoration: underline;
+}
+.np-artist {
+  overflow: hidden;
+  color: var(--label-2);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.np-controls {
+  display: flex;
+  align-items: center;
+}
+.np-controls button,
+.np-mute {
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+.np-controls button:hover,
+.np-mute:hover {
+  background: rgba(60, 60, 67, 0.14);
+}
+.np-controls svg,
+.np-mute svg {
+  fill: currentColor;
+}
+
+/* na barra do topo */
+.np-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  padding: 0 6px 0 4px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 8px -3px rgba(40, 20, 90, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+.np-bar .np-cover {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+}
+.np-bar .np-text {
+  width: 150px;
+}
+.np-bar .np-title {
+  font-size: 0.76rem;
+}
+.np-bar .np-artist {
+  font-size: 0.66rem;
+}
+.np-bar .np-controls button,
+.np-bar .np-mute {
+  width: 24px;
+  height: 24px;
+}
+.np-bar .np-controls svg {
+  width: 12px;
+  height: 11px;
+}
+.np-bar .np-mute svg {
+  width: 15px;
+  height: 11px;
+}
+.np-bar .np-play {
+  background: rgba(60, 60, 67, 0.1);
+}
+.np-bar.is-playing .np-play {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* na tela de bloqueio */
+.np-lock {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px 12px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(20px) saturate(1.5);
+  box-shadow: 0 14px 34px -16px rgba(76, 40, 130, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+  color: var(--label);
+  text-align: left;
+}
+.np-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.np-lock .np-cover {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+}
+.np-lock .np-title {
+  font-size: 1rem;
+}
+.np-lock .np-artist {
+  font-size: 0.85rem;
+}
+.np-lock .np-controls {
+  justify-content: center;
+  gap: 22px;
+}
+.np-lock .np-controls button {
+  width: 40px;
+  height: 40px;
+}
+.np-lock .np-controls svg {
+  width: 22px;
+  height: 20px;
+}
+.np-progress {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.74rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--label-2);
+}
+.np-track {
+  height: 4px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: rgba(60, 60, 67, 0.18);
+}
+.np-track div {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent);
 }
 
 .desk {
@@ -951,33 +1306,18 @@ button {
   position: fixed;
   inset: 0;
   z-index: 10000;
+  isolation: isolate;
   display: grid;
   grid-template-rows: auto 1fr auto;
   justify-items: center;
-  width: 100%;
-  padding: 7vh 20px 18px;
-  border: 0;
-  background: var(--wall), #ede6fa;
+  padding: 6vh 20px 18px;
   color: var(--deep);
   text-align: center;
   cursor: pointer;
   transition: transform 0.42s cubic-bezier(0.6, 0, 0.3, 1);
 }
-.lock span {
-  display: block;
-}
-.lock .avatar {
-  display: grid;
-}
 .lock.is-leaving {
   transform: translateY(-100%);
-}
-.lock:focus-visible {
-  outline: none;
-}
-.lock:focus-visible .lock-handle {
-  outline: 3px solid var(--accent);
-  outline-offset: 5px;
 }
 .lock-date {
   font-size: 1.25rem;
@@ -993,13 +1333,18 @@ button {
   letter-spacing: -0.04em;
   font-variant-numeric: tabular-nums;
 }
-.lock-card {
+.lock-cards {
   align-self: start;
-  display: flex !important;
+  display: grid;
+  gap: 12px;
+  width: min(400px, 100%);
+  margin-top: 26px;
+  cursor: default;
+}
+.lock-card {
+  display: flex;
   align-items: center;
   gap: 14px;
-  width: min(400px, 100%);
-  margin-top: 30px;
   padding: 14px 18px;
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.62);
@@ -1007,6 +1352,7 @@ button {
   box-shadow: 0 14px 34px -16px rgba(76, 40, 130, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.7);
   text-align: left;
   color: var(--label);
+  cursor: pointer;
 }
 .lock-name {
   font-size: 1.15rem;
@@ -1016,9 +1362,22 @@ button {
   color: var(--label-2);
 }
 .lock-foot {
-  display: grid !important;
+  display: grid;
   justify-items: center;
   gap: 16px;
+  padding: 8px 16px 0;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+.lock-foot:focus-visible {
+  outline: none;
+}
+.lock-foot:focus-visible .lock-handle {
+  outline: 3px solid var(--accent);
+  outline-offset: 5px;
 }
 .lock-hint {
   font-size: 1rem;
@@ -1026,6 +1385,7 @@ button {
   color: #4b3f6b;
 }
 .lock-handle {
+  display: block;
   width: 140px;
   height: 5px;
   border-radius: 3px;
@@ -1033,12 +1393,33 @@ button {
 }
 
 /* ---------- telas estreitas: janelas ocupam a tela toda ---------- */
+@media (max-width: 1080px) {
+  .bar-menu {
+    display: none;
+  }
+}
+
 @media (max-width: 720px) {
   :root {
     --dock-h: 96px;
   }
-  .bar-date {
+  .bar-date,
+  .bar-menu,
+  .bar-battery-pct,
+  .bar-sound,
+  .np-bar .np-text,
+  .np-bar .np-mute {
     display: none;
+  }
+  .bar {
+    gap: 6px;
+    padding: 0 8px;
+  }
+  .bar-right {
+    gap: 0;
+  }
+  .lock-time {
+    font-size: clamp(4.5rem, 24vw, 7rem);
   }
   .desk {
     overflow-y: auto;
@@ -1193,8 +1574,13 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
   .lock,
-  .dock-tile {
+  .dock-tile,
+  .bar-battery-fill {
     transition: none;
+  }
+  .blob,
+  .bar-wifi .wifi-arc {
+    animation: none;
   }
   .toast {
     animation: none;
