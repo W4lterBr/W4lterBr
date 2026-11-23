@@ -64,7 +64,8 @@ O `og.png` precisa ficar abaixo de uns 300 KB, senão o WhatsApp pode não mostr
   faixa ou perfil. O player carrega em segundo plano logo depois da página, sem tocar, para já mostrar o nome e a capa
   da faixa certa; `music.comecarNaFaixa` diz em qual faixa da playlist ele começa.
 - **Sons da interface:** são sintetizados em `src/os/sounds.ts` (não há arquivos de áudio). O ícone de alto-falante
-  da barra abre o controle de volume, que vale para os sons e para a música.
+  da barra abre o controle de volume, que vale para os sons e para a música. Ao passar o mouse sobre o dock, cada
+  ícone toca uma nota curta (`playHover`), em escala pentatônica da esquerda para a direita; no toque do celular não toca.
 - **Bateria:** é de enfeite. Perde 1% a cada 15 s (`DRAIN_EVERY_MS` em `src/os/StatusIcons.tsx`) e recarrega com um clique.
 - **Wi-Fi:** mostra a conexão real do visitante (online/offline e velocidade estimada, quando o navegador informa).
 
