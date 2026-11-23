@@ -67,6 +67,29 @@ const SOUNDS: Record<SoundName, Note[]> = {
 }
 
 export function playSound(name: SoundName): void {
+  playNotes(SOUNDS[name])
+}
+
+// Notas do dock: escala pentatônica (dó, ré, mi, sol, lá), da esquerda para a direita.
+// Passar o mouse pelo dock inteiro toca um pequeno arpejo que nunca soa desafinado.
+const DOCK_NOTES = [523.25, 587.33, 659.25, 783.99, 880]
+let lastHover = 0
+
+/** Toque curto e baixo, como uma marimba, ao passar o mouse sobre o item `step` do dock. */
+export function playHover(step: number): void {
+  const now = performance.now()
+  // ao varrer o dock rápido, os toques não se amontoam
+  if (now - lastHover < 45) return
+  lastHover = now
+  const freq = DOCK_NOTES[Math.min(Math.max(step, 0), DOCK_NOTES.length - 1)]
+  playNotes([
+    { freq, at: 0, dur: 0.18, gain: 0.035 },
+    // um harmônico bem curto dá o toque de madeira
+    { freq: freq * 4, at: 0, dur: 0.045, gain: 0.006 },
+  ])
+}
+
+function playNotes(notes: Note[]): void {
   if (volume === 0) return
   // Navegadores só liberam áudio depois de uma interação; antes disso não há o que tocar.
   if (!ctx && navigator.userActivation && !navigator.userActivation.hasBeenActive) return
@@ -75,7 +98,7 @@ export function playSound(name: SoundName): void {
     if (ctx.state === 'suspended') void ctx.resume()
     const now = ctx.currentTime
     const scale = volume / DEFAULT_VOLUME
-    for (const n of SOUNDS[name]) {
+    for (const n of notes) {
       const osc = ctx.createOscillator()
       const gain = ctx.createGain()
       const t0 = now + n.at

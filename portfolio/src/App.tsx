@@ -8,7 +8,7 @@ import { AppIcon, GitHubIcon } from './os/icons'
 import { LanguageMenu } from './os/LanguageMenu'
 import { LockScreen } from './os/LockScreen'
 import { BarPlayer, MusicProvider } from './os/music'
-import { playSound } from './os/sounds'
+import { playHover, playSound } from './os/sounds'
 import { Battery, VolumeControl, Wifi } from './os/StatusIcons'
 import { useClock } from './os/useClock'
 import { Wallpaper } from './os/Wallpaper'
@@ -234,7 +234,7 @@ export default function App() {
 
         <nav className="dock" aria-label={t('dock.label')}>
           <div className="dock-shelf">
-            {APP_IDS.map((id) => {
+            {APP_IDS.map((id, i) => {
               const win = state.wins.find((w) => w.id === id)
               return (
                 <button
@@ -244,6 +244,7 @@ export default function App() {
                   data-dock={id}
                   data-open={win ? '' : undefined}
                   aria-pressed={top?.id === id}
+                  onPointerEnter={(e) => e.pointerType === 'mouse' && playHover(i)}
                   onClick={() => (top?.id === id ? minimizeApp(id) : openApp(id))}
                 >
                   <span className={`dock-tile tile-${id}`}>
@@ -254,7 +255,13 @@ export default function App() {
               )
             })}
             <span className="dock-sep" aria-hidden />
-            <a className="dock-item" href={data.profile.contact.github} target="_blank" rel="noreferrer">
+            <a
+              className="dock-item"
+              href={data.profile.contact.github}
+              target="_blank"
+              rel="noreferrer"
+              onPointerEnter={(e) => e.pointerType === 'mouse' && playHover(APP_IDS.length)}
+            >
               <span className="dock-tile tile-github">
                 <GitHubIcon />
               </span>
